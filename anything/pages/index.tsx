@@ -2,7 +2,8 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
+import Link from "next/link";
 
 const Home: NextPage = () => {
   const { data: session } = useSession();
@@ -17,8 +18,13 @@ const Home: NextPage = () => {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">찬우</a>
+          Welcome to{" "}
+          <Link href="/login">
+            <a>{session?.user?.name ? session.user.name : "login"}</a>
+          </Link>
         </h1>
+
+        <h3 onClick={() => signOut()}>LogOut</h3>
 
         <p className={styles.description}>
           Get started by editing{" "}

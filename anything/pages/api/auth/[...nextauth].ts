@@ -27,6 +27,8 @@ export default NextAuth({
           },
         });
 
+        console.log("user", user);
+
         if (user) return user;
         return null;
       },
@@ -36,15 +38,15 @@ export default NextAuth({
     signIn: "/login",
   },
   callbacks: {
-    jwt: ({ token, user, account, profile, isNewUser }) => {
-      console.log("token", token);
-      console.log("user", user);
-      console.log("account", account);
-      console.log("profile", profile);
-      console.log("isNewUser", isNewUser);
-
+    jwt: ({ token, user, account }) => {
       if (user) {
         token.id = user.id;
+        token.name = user.name;
+        token.email = user.email;
+        token.picture = user.image;
+      }
+      if (account?.accessToken) {
+        token.accessToken = account.accessToken;
       }
       return token;
     },

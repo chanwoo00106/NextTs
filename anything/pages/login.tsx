@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { signIn } from "next-auth/react";
+
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 interface inputT {
   username: string;
@@ -7,12 +9,15 @@ interface inputT {
 }
 
 export default function Login() {
+  const router = useRouter();
   const [input, setInput] = useState<inputT>({ username: "", password: "" });
   const onSubmit = async (e: any) => {
     e.preventDefault();
     const result = await signIn("credentials", { ...input });
     console.log(result);
   };
+  const { data: session } = useSession();
+  if (session?.user?.name) router.push("/");
 
   const onChange = (e: any) => {
     setInput({
