@@ -8,8 +8,10 @@ interface inputT {
 
 export default function Login() {
   const [input, setInput] = useState<inputT>({ username: "", password: "" });
-  const onSubmit = () => {
-    signIn();
+  const onSubmit = async (e: any) => {
+    e.preventDefault();
+    const result = await signIn("credentials", { ...input });
+    console.log(result);
   };
 
   const onChange = (e: any) => {
@@ -36,6 +38,7 @@ export default function Login() {
           onChange={onChange}
           placeholder="비밀번호"
         />
+        <button type="submit">submit</button>
       </form>
     </div>
   );

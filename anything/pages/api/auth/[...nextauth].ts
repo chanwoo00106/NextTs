@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import CredentialProvider from "next-auth/providers/credentials";
 import { PrismaClient } from "@prisma/client";
 
-// const prisma = new PrismaClient();
+const prisma = new PrismaClient();
 
 export default NextAuth({
   providers: [
@@ -19,18 +19,15 @@ export default NextAuth({
           type: "password",
         },
       },
-      authorize: (credentials) => {
+      authorize: async (credentials) => {
         // 로그인 로직
-        // if (
-        //   credentials?.username === "john" &&
-        //   credentials?.password === "test"
-        // ) {
-        //   return {
-        //     id: 2,
-        //     name: "chan",
-        //     email: "example@example.com",
-        //   };
-        // }
+        const user = await prisma.users.findFirst({
+          where: {
+            username: credentials?.username,
+          },
+        });
+
+        if (user) return user;
         return null;
       },
     }),
@@ -39,7 +36,13 @@ export default NextAuth({
     signIn: "/login",
   },
   callbacks: {
-    jwt: ({ token, user }) => {
+    jwt: ({ token, user, account, profile, isNewUser }) => {
+      console.log("token", token);
+      console.log("user", user);
+      console.log("account", account);
+      console.log("profile", profile);
+      console.log("isNewUser", isNewUser);
+
       if (user) {
         token.id = user.id;
       }
@@ -50,6 +53,9 @@ export default NextAuth({
         session.id = token.id;
       }
       return session;
+    },
+    redirect: ({ baseUrl }) => {
+      return baseUrl;
     },
   },
   secret: "test",
