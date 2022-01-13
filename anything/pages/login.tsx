@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import styled from "@emotion/styled";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
@@ -27,8 +27,9 @@ export default function Login() {
   };
 
   return (
-    <div>
+    <LoginWrapper>
       <form onSubmit={onSubmit}>
+        <h1>Login</h1>
         <input
           type="text"
           value={input.username}
@@ -45,6 +46,43 @@ export default function Login() {
         />
         <button type="submit">submit</button>
       </form>
-    </div>
+    </LoginWrapper>
   );
 }
+
+const LoginWrapper = styled.div`
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  form {
+    display: flex;
+    flex-direction: column;
+
+    h1 {
+      text-align: center;
+    }
+
+    input {
+      margin-bottom: 20px;
+      border: none;
+      outline: none;
+      background-color: #d9d9d9;
+      height: 40px;
+      padding: 10px;
+      border-radius: 10px;
+    }
+
+    button {
+      outline: none;
+      border: none;
+      border-radius: 10px;
+      width: 50%;
+      margin: 0 auto;
+      padding: 10px;
+      background: #e9e9e9;
+    }
+  }
+`;
