@@ -17,4 +17,13 @@ model Users {
   name String?
   email String?
   picture String?
+  todos Todos[]
+}
+
+model Todos {
+  id Int @id @default(autoincrement())
+  todo String
+  createDate DateTime @default(now())
+  user Users @relation(fields: [userId], references: [id])
+  userId Int
 }
