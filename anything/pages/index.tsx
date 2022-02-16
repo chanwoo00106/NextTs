@@ -3,9 +3,13 @@ import Head from "next/head";
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import styled from "@emotion/styled";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 const Home: NextPage = () => {
   const { data: session } = useSession();
+
   return (
     <MainStyle>
       <Head>

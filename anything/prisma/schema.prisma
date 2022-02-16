@@ -17,7 +17,7 @@ model Users {
   name String?
   email String?
   picture String?
-  todos Todos[]
+  todos Todos?
 }
 
 model Todos {
