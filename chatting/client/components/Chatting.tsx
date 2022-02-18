@@ -1,4 +1,5 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { ChangeEvent, FormEvent, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { Socket } from "socket.io-client";
 import { RootState } from "../modules";
@@ -14,9 +15,13 @@ export default function Chatting({ socket }: ChattingProps) {
     key: state.myRoom.key,
   }));
 
-  socket.on("GET_MESSAGE", ({ message }) => {
-    setMessages([...messages, message]);
-  });
+  useMemo(() => {
+    socket.on("GET_MESSAGE", ({ message }) => {
+      setMessages((msg) => {
+        return [...msg, message];
+      });
+    });
+  }, []);
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) =>
     setMessage(e.target.value);

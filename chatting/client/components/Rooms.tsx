@@ -25,17 +25,19 @@ export default function Rooms({ socket }: RoomsProps) {
     socket.emit("GET_ROOMS");
   }, []);
 
-  socket.on("GET_ROOMS", ({ rooms }: RoomsI) => {
-    setRooms(rooms);
-  });
+  useEffect(() => {
+    socket.on("GET_ROOMS", ({ rooms }: RoomsI) => {
+      setRooms(rooms);
+    });
 
-  socket.on("NEW_ROOM", ({ key, name }: { key: string; name: string }) => {
-    setRooms([...rooms, { key, name }]);
-  });
+    socket.on("NEW_ROOM", ({ key, name }: { key: string; name: string }) => {
+      setRooms([...rooms, { key, name }]);
+    });
 
-  socket.on("JOINED_ROOM", ({ key, name }: { key: string; name: string }) => {
-    dispatch(joined_room({ key, name }));
-  });
+    socket.on("JOINED_ROOM", ({ key, name }: { key: string; name: string }) => {
+      dispatch(joined_room({ key, name }));
+    });
+  }, [socket]);
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) =>
     setRoomName(e.target.value);
