@@ -3,7 +3,7 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Socket } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../modules";
-import { joined_room } from "../modules/myRoom";
+import { joined_room, leave_room } from "../modules/myRoom";
 
 interface RoomsProps {
   socket: Socket;
@@ -50,9 +50,23 @@ export default function Rooms({ socket }: RoomsProps) {
     setRoomName("");
   };
 
+  const leaveRoom = () => {
+    dispatch(leave_room());
+    socket.emit("LEAVE_ROOM", { key: myRoom.key });
+  };
+
   return (
     <div>
-      {myRoom.key ? <h1>Room | {myRoom.name}</h1> : <h1>Rooms</h1>}
+      {myRoom.key ? (
+        <>
+          <h1>Room | {myRoom.name}</h1>
+          <div>
+            <button onClick={leaveRoom}>나가기</button>
+          </div>
+        </>
+      ) : (
+        <h1>Rooms</h1>
+      )}
       {!myRoom.key && (
         <>
           {rooms.map(({ key, name }) => (

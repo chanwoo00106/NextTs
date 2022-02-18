@@ -11,6 +11,7 @@ const EVENTS = {
   GET_ROOMS: "GET_ROOMS",
   NEW_ROOM: "NEW_ROOM",
   JOINED_ROOM: "JOINED_ROOM",
+  LEAVE_ROOM: "LEAVE_ROOM",
 };
 
 interface RoomType {
@@ -40,8 +41,14 @@ function socket({ io }: { io: Server }) {
     });
 
     socket.on(EVENTS.JOINED_ROOM, ({ key, name }: RoomType) => {
+      console.log("join" + key);
       socket.join(key);
       socket.emit(EVENTS.JOINED_ROOM, { key, name });
+    });
+
+    socket.on(EVENTS.LEAVE_ROOM, (key: string) => {
+      console.log("leave" + key);
+      socket.leave(key);
     });
 
     socket.on(EVENTS.SEND_MESSAGE, ({ message, key }) => {

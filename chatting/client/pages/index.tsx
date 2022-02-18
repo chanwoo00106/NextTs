@@ -9,42 +9,14 @@ import { RootState } from "../modules";
 const socket = io(SOCKET_URL);
 
 const Home: NextPage = () => {
-  const { myRoom } = useSelector((state: RootState) => ({
-    myRoom: state.myRoom,
+  const { key } = useSelector((state: RootState) => ({
+    key: state.myRoom.key,
   }));
-  // const [messages, setMessages] = useState<MessageI[]>([]);
-  // const [message, setMessage] = useState<string>("");
-
-  // socket.on("GET_MESSAGE", ({ username, message }) => {
-  //   setMessages([
-  //     ...messages,
-  //     {
-  //       username,
-  //       message,
-  //     },
-  //   ]);
-  // });
-
-  // const onChange = (e: ChangeEvent<HTMLInputElement>) =>
-  //   setMessage(e.target.value);
-
-  // const onSubmit = (e: FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   socket.emit("SEND_MESSAGE", { username: "chanwoo", message });
-  //   setMessage("");
-  //   setMessages([
-  //     ...messages,
-  //     {
-  //       username: "chanwoo",
-  //       message,
-  //     },
-  //   ]);
-  // };
 
   return (
     <div>
       <Rooms socket={socket} />
-      {myRoom.key && <Chatting socket={socket} />}
+      {key && <Chatting socket={socket} />}
     </div>
   );
 };
