@@ -23,11 +23,12 @@ const io = new Server(httpServer, {
   },
 });
 
-app.get("/", (req, res) => res.send(`Server version is ${version}`));
+app.get("/", (req, res) => {
+  socket({ io });
+  res.send(`Server version is ${version}`);
+});
 
 httpServer.listen(port, host, () => {
   log.info(`🏃 Server version ${version} is listening 🏃`);
   log.info(`http://${host}:${port}`);
-
-  socket({ io });
 });
