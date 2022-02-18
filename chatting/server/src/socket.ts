@@ -44,8 +44,8 @@ function socket({ io }: { io: Server }) {
       socket.emit(EVENTS.JOINED_ROOM, { key, name });
     });
 
-    socket.on(EVENTS.SEND_MESSAGE, ({ username, message }) => {
-      socket.broadcast.emit(EVENTS.GET_MESSAGE, { username, message });
+    socket.on(EVENTS.SEND_MESSAGE, ({ message, key }) => {
+      socket.broadcast.to(key).emit(EVENTS.GET_MESSAGE, { message });
     });
 
     socket.on(EVENTS.disconnect, () => {
