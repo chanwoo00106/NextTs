@@ -6,6 +6,7 @@ const EVENTS = {
   connection: "connection",
   disconnect: "disconnect",
   SEND_MESSAGE: "SEND_MESSAGE",
+  GET_MESSAGE: "GET_MESSAGE",
 };
 
 const rooms: Record<string, { name: string }> = {};
@@ -18,6 +19,7 @@ function socket({ io }: { io: Server }) {
 
     socket.on(EVENTS.SEND_MESSAGE, ({ username, message }) => {
       console.log(username, message);
+      socket.broadcast.emit(EVENTS.GET_MESSAGE, { username, message });
     });
 
     socket.on(EVENTS.disconnect, () => {
