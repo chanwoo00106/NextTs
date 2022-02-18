@@ -10,9 +10,15 @@ const EVENTS = {
   CREATE_ROOM: "CREATE_ROOM",
   GET_ROOMS: "GET_ROOMS",
   NEW_ROOM: "NEW_ROOM",
+  JOINED_ROOM: "JOINED_ROOM",
 };
 
-const rooms: { key: string; name: string }[] = [];
+interface RoomType {
+  key: string;
+  name: string;
+}
+
+const rooms: RoomType[] = [];
 
 function socket({ io }: { io: Server }) {
   logger.info(`Sockets enabled`);
@@ -25,10 +31,17 @@ function socket({ io }: { io: Server }) {
     });
 
     socket.on(EVENTS.CREATE_ROOM, ({ roomName }) => {
-      const roomId = nanoid();
-      rooms.push({ key: roomId, name: roomName });
-      socket.emit(EVENTS.NEW_ROOM, { key: roomId, name: roomName });
-      socket.join(roomId);
+      const key = nanoid();
+      rooms.push({ key, name: roomName });
+      socket.emit(EVENTS.NEW_ROOM, { key, name: roomName });
+      socket.broadcast.emit(EVENTS.NEW_ROOM, { key, name: roomName });
+      socket.join(key);
+      socket.emit(EVENTS.JOINED_ROOM, { key, name: roomName });
+    });
+
+    socket.on(EVENTS.JOINED_ROOM, ({ key, name }: RoomType) => {
+      socket.join(key);
+      socket.emit(EVENTS.JOINED_ROOM, { key, name });
     });
 
     socket.on(EVENTS.SEND_MESSAGE, ({ username, message }) => {
