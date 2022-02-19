@@ -15,7 +15,7 @@ export const Room = styled.li`
 `;
 
 export const Nickname = styled.p`
-  margin: 0 5px;
+  margin: 0 5px 3px;
 `;
 
 export const Message = styled.div`
