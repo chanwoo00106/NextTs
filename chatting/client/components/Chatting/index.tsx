@@ -14,6 +14,7 @@ interface ChattingProps {
 interface MessagesI {
   message: string;
   nickname: string;
+  textAlign: "left" | "right";
 }
 
 export default function Chatting({ socket }: ChattingProps) {
@@ -27,7 +28,7 @@ export default function Chatting({ socket }: ChattingProps) {
   useMemo(() => {
     socket.on("GET_MESSAGE", ({ message, nickname }) => {
       setMessages((msg) => {
-        return [...msg, { message, nickname }];
+        return [...msg, { message, nickname, textAlign: "right" }];
       });
     });
   }, []);
@@ -38,16 +39,23 @@ export default function Chatting({ socket }: ChattingProps) {
   const sendMessage = (e: FormEvent) => {
     e.preventDefault();
     socket.emit("SEND_MESSAGE", { message, key, nickname });
-    setMessages([...messages, { message, nickname: "Me" }]);
+    setMessages([...messages, { message, nickname: "Me", textAlign: "left" }]);
     setMessage("");
   };
 
   return (
     <RoomS.RoomsWrapper>
       <S.List>
-        {messages.map(({ message, nickname }, i) => (
-          <S.Room key={i}>
-            {nickname} | {message}
+        {messages.map(({ message, nickname, textAlign }, i) => (
+          <S.Room style={{ textAlign }} key={i}>
+            <S.Nickname>{nickname}</S.Nickname>
+            <S.Message
+              style={{
+                background: textAlign === "left" ? "#2ed573" : "#1e90ff",
+              }}
+            >
+              {message}
+            </S.Message>
           </S.Room>
         ))}
       </S.List>

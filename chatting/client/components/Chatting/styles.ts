@@ -13,3 +13,14 @@ export const Room = styled.li`
   font-size: 1.2rem;
   margin: 1rem auto;
 `;
+
+export const Nickname = styled.p`
+  margin: 0 5px;
+`;
+
+export const Message = styled.div`
+  color: white;
+  border-radius: 10px;
+  display: inline-block;
+  padding: 5px 10px;
+`;
