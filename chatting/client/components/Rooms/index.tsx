@@ -3,7 +3,7 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Socket } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../modules";
-import { joined_room, leave_room } from "../../modules/myRoom";
+import { joined_room } from "../../modules/myRoom";
 
 import * as S from "./styles";
 
@@ -19,9 +19,6 @@ export default function Rooms({ socket }: RoomsProps) {
   const [rooms, setRooms] = useState<{ key: string; name: string }[]>([]);
   const [roomName, setRoomName] = useState<string>("");
   const dispatch = useDispatch();
-  const { myRoom } = useSelector((state: RootState) => ({
-    myRoom: state.myRoom,
-  }));
 
   useEffect(() => {
     socket.emit("GET_ROOMS");
@@ -58,11 +55,9 @@ export default function Rooms({ socket }: RoomsProps) {
     <S.RoomsWrapper>
       <S.List>
         {rooms.map(({ key, name }) => (
-          <>
-            <S.Room key={key} onClick={() => joinRoom(key, name)}>
-              {name}
-            </S.Room>
-          </>
+          <S.Room key={key} onClick={() => joinRoom(key, name)}>
+            {name}
+          </S.Room>
         ))}
       </S.List>
       <S.SendForm onSubmit={onSubmit}>
@@ -70,6 +65,10 @@ export default function Rooms({ socket }: RoomsProps) {
           placeholder="방 이름 입력"
           value={roomName}
           onChange={onChange}
+          maxLength={10}
+          max={10}
+          minLength={1}
+          min={1}
           type="text"
         />
         <S.Button type="submit" disabled={!roomName.trim()}>

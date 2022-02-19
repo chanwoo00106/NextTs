@@ -6,16 +6,18 @@ import Chatting from "../components/Chatting";
 import Rooms from "../components/Rooms";
 import { SOCKET_URL } from "../config/default";
 import { RootState } from "../modules";
+import { change_nickname, leave_room } from "../modules/myRoom";
+import { ChangeEvent } from "react";
 
 import { GrNext } from "react-icons/gr";
-import { leave_room } from "../modules/myRoom";
 
 const socket = io(SOCKET_URL);
 
 const Home: NextPage = () => {
-  const { key, name } = useSelector((state: RootState) => ({
+  const { key, name, nickname } = useSelector((state: RootState) => ({
     key: state.myRoom.key,
     name: state.myRoom.name,
+    nickname: state.myRoom.nickname,
   }));
   const dispatch = useDispatch();
 
@@ -24,11 +26,28 @@ const Home: NextPage = () => {
     dispatch(leave_room());
   };
 
+  const onChange = (e: ChangeEvent<HTMLInputElement>) =>
+    dispatch(change_nickname(e.target.value));
+
   return (
     <HomeWrapper>
-      <Title align={key}>
+      <Title>
         {key && <GrNext onClick={leaveRoom} size="2rem" />}
-        <div>{!key ? "Room List" : `${name} Room`}</div>
+        {!key ? (
+          <>
+            <div>Room List</div>
+            <Input
+              type="text"
+              placeholder="닉네임 입력"
+              maxLength={10}
+              minLength={1}
+              value={nickname}
+              onChange={onChange}
+            />
+          </>
+        ) : (
+          <div>{`${name} Room`}</div>
+        )}
       </Title>
       {!key && <Rooms socket={socket} />}
       {key && <Chatting socket={socket} />}
@@ -54,8 +73,7 @@ const Title = styled.div`
   border-top-right-radius: 10px;
   display: flex;
   align-items: center;
-  justify-content: ${(props: { align: string }) =>
-    props.align ? "space-between" : "left"};
+  justify-content: space-between;
 
   svg {
     transform: rotate(180deg);
@@ -65,6 +83,14 @@ const Title = styled.div`
       stroke: #fff;
     }
   }
+`;
+
+const Input = styled.input`
+  outline: none;
+  border: none;
+  font-size: 1rem;
+  padding: 5px 10px;
+  border-radius: 10px;
 `;
 
 export default Home;
