@@ -2,8 +2,10 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Socket } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../modules";
-import { joined_room, leave_room } from "../modules/myRoom";
+import { RootState } from "../../modules";
+import { joined_room, leave_room } from "../../modules/myRoom";
+
+import * as S from "./styles";
 
 interface RoomsProps {
   socket: Socket;
@@ -58,34 +60,31 @@ export default function Rooms({ socket }: RoomsProps) {
   };
 
   return (
-    <div>
-      {myRoom.key ? (
-        <>
-          <h1>Room | {myRoom.name}</h1>
-          <div>
-            <button onClick={leaveRoom}>나가기</button>
-          </div>
-        </>
-      ) : (
-        <h1>Rooms</h1>
-      )}
-      {!myRoom.key && (
-        <>
-          {rooms.map(({ key, name }) => (
-            <div
-              key={key}
-              style={{ cursor: "pointer" }}
-              onClick={() => joinRoom(key, name)}
-            >
+    <S.RoomsWrapper>
+      <S.List>
+        {rooms.map(({ key, name }) => (
+          <>
+            <S.Room key={key} onClick={() => joinRoom(key, name)}>
               {name}
-            </div>
-          ))}
-          <form onSubmit={onSubmit}>
-            <input value={roomName} onChange={onChange} type="text" />
-            <button type="submit">CREATE</button>
-          </form>
-        </>
-      )}
-    </div>
+            </S.Room>
+          </>
+        ))}
+      </S.List>
+      <S.SendForm onSubmit={onSubmit}>
+        <S.Input
+          placeholder="방 이름 입력"
+          value={roomName}
+          onChange={onChange}
+          type="text"
+        />
+        <S.Button
+          style={{ color: roomName ? "#000" : "#b5b5b5" }}
+          type="submit"
+          disabled={!roomName}
+        >
+          CREATE
+        </S.Button>
+      </S.SendForm>
+    </S.RoomsWrapper>
   );
 }

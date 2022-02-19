@@ -2,7 +2,7 @@
 import { ChangeEvent, FormEvent, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { Socket } from "socket.io-client";
-import { RootState } from "../modules";
+import { RootState } from "../../modules";
 
 interface ChattingProps {
   socket: Socket;

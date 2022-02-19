@@ -41,13 +41,11 @@ function socket({ io }: { io: Server }) {
     });
 
     socket.on(EVENTS.JOINED_ROOM, ({ key, name }: RoomType) => {
-      console.log("join" + key);
       socket.join(key);
       socket.emit(EVENTS.JOINED_ROOM, { key, name });
     });
 
     socket.on(EVENTS.LEAVE_ROOM, (key: string) => {
-      console.log("leave" + key);
       socket.leave(key);
     });
 
@@ -56,7 +54,7 @@ function socket({ io }: { io: Server }) {
     });
 
     socket.on(EVENTS.disconnect, () => {
-      console.log("disconnect");
+      logger.info(`User disconnect ${socket.id}`);
     });
   });
 }
