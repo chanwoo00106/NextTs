@@ -45,6 +45,13 @@ export default function Chatting({ socket }: ChattingProps) {
         return [...msg, { message, textAlign: "center" }];
       });
     });
+
+    socket.on("LEAVE_ROOM_MESSAGE", ({ message }) => {
+      console.log(message);
+      setMessages((msg) => {
+        return [...msg, { message, textAlign: "center" }];
+      });
+    });
   }, []);
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) =>
