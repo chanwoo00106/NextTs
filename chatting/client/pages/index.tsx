@@ -1,11 +1,14 @@
 import styled from "@emotion/styled";
 import type { NextPage } from "next";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import io from "socket.io-client";
 import Chatting from "../components/Chatting";
 import Rooms from "../components/Rooms";
 import { SOCKET_URL } from "../config/default";
 import { RootState } from "../modules";
+
+import { GrNext } from "react-icons/gr";
+import { leave_room } from "../modules/myRoom";
 
 const socket = io(SOCKET_URL);
 
@@ -14,11 +17,20 @@ const Home: NextPage = () => {
     key: state.myRoom.key,
     name: state.myRoom.name,
   }));
+  const dispatch = useDispatch();
+
+  const leaveRoom = () => {
+    socket.emit("LEAVE_ROOM", { key });
+    dispatch(leave_room());
+  };
 
   return (
     <HomeWrapper>
-      <Title>{!key ? "Room List" : `${name} Room`}</Title>
-      <Rooms socket={socket} />
+      <Title align={key}>
+        {key && <GrNext onClick={leaveRoom} size="2rem" />}
+        <div>{!key ? "Room List" : `${name} Room`}</div>
+      </Title>
+      {!key && <Rooms socket={socket} />}
       {key && <Chatting socket={socket} />}
     </HomeWrapper>
   );
@@ -35,11 +47,24 @@ const HomeWrapper = styled.div`
 const Title = styled.div`
   width: 600px;
   background: #000;
-  padding: 0 2rem;
+  padding: 0.5rem 1rem;
   color: #fff;
-  font-size: 3rem;
+  font-size: 2.5rem;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: ${(props: { align: string }) =>
+    props.align ? "space-between" : "left"};
+
+  svg {
+    transform: rotate(180deg);
+    cursor: pointer;
+
+    polyline {
+      stroke: #fff;
+    }
+  }
 `;
 
 export default Home;

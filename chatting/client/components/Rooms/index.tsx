@@ -54,11 +54,6 @@ export default function Rooms({ socket }: RoomsProps) {
     setRoomName("");
   };
 
-  const leaveRoom = () => {
-    dispatch(leave_room());
-    socket.emit("LEAVE_ROOM", { key: myRoom.key });
-  };
-
   return (
     <S.RoomsWrapper>
       <S.List>
@@ -77,11 +72,7 @@ export default function Rooms({ socket }: RoomsProps) {
           onChange={onChange}
           type="text"
         />
-        <S.Button
-          style={{ color: roomName ? "#000" : "#b5b5b5" }}
-          type="submit"
-          disabled={!roomName}
-        >
+        <S.Button type="submit" disabled={!roomName.trim()}>
           CREATE
         </S.Button>
       </S.SendForm>
