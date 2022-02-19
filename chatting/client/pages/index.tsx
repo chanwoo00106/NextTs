@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import styled from "@emotion/styled";
 import type { NextPage } from "next";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,7 +8,7 @@ import Rooms from "../components/Rooms";
 import { SOCKET_URL } from "../config/default";
 import { RootState } from "../modules";
 import { change_nickname, leave_room } from "../modules/myRoom";
-import { ChangeEvent } from "react";
+import { ChangeEvent, useMemo } from "react";
 
 import { GrNext } from "react-icons/gr";
 

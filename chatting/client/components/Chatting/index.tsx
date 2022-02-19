@@ -1,11 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import React from "react";
 import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Socket } from "socket.io-client";
 import { RootState } from "../../modules";
 
 import * as S from "./styles";
 import * as RoomS from "../Rooms/styles";
+import { leave_room } from "../../modules/myRoom";
 
 interface ChattingProps {
   socket: Socket;
@@ -17,7 +19,8 @@ interface MessagesI {
   textAlign: "left" | "right" | "center";
 }
 
-export default function Chatting({ socket }: ChattingProps) {
+function Chatting({ socket }: ChattingProps) {
+  const dispatch = useDispatch();
   const [message, setMessage] = useState<string>("");
   const [messages, setMessages] = useState<MessagesI[]>([]);
   const { key, nickname } = useSelector((state: RootState) => ({
@@ -50,6 +53,13 @@ export default function Chatting({ socket }: ChattingProps) {
       setMessages((msg) => {
         return [...msg, { message, textAlign: "center" }];
       });
+    });
+
+    socket.on("DELETE_ROOM", (room) => {
+      if (key === room.key) {
+        socket.emit("LEAVE_ROOM", { key, nickname });
+        dispatch(leave_room());
+      }
     });
   }, []);
 
@@ -97,3 +107,5 @@ export default function Chatting({ socket }: ChattingProps) {
     </RoomS.RoomsWrapper>
   );
 }
+
+export default React.memo(Chatting);

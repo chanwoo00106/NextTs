@@ -3,9 +3,10 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Socket } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../modules";
-import { joined_room } from "../../modules/myRoom";
+import { joined_room, leave_room } from "../../modules/myRoom";
 
 import * as S from "./styles";
+import produce from "immer";
 
 interface RoomsProps {
   socket: Socket;
@@ -39,6 +40,14 @@ export default function Rooms({ socket }: RoomsProps) {
     socket.on("JOINED_ROOM", ({ key, name }: { key: string; name: string }) => {
       dispatch(joined_room({ key, name }));
     });
+
+    socket.on("DELETE_ROOM", ({ key }) => {
+      setRooms(
+        produce(rooms, (draft) => {
+          draft = draft.filter((i) => i.key !== key);
+        })
+      );
+    });
   }, [socket]);
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) =>
@@ -59,6 +68,7 @@ export default function Rooms({ socket }: RoomsProps) {
     if (!nickname) alert("nickname을 입력해주세요");
     else {
       const password = prompt("방의 비밀번호를 입력해주세요");
+      if (!password) return;
       socket.emit("CREATE_ROOM", { roomName, password });
       setRoomName("");
     }

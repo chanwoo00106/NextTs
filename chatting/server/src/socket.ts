@@ -82,6 +82,8 @@ function socket({ io }: { io: Server }) {
 
     socket.on(EVENTS.DELETE_ROOM, ({ key, password }) => {
       rooms = rooms.filter((i) => i.key !== key && i.password !== password);
+      socket.emit(EVENTS.DELETE_ROOM, { key });
+      socket.broadcast.emit(EVENTS.DELETE_ROOM, { key });
     });
 
     socket.on(EVENTS.disconnect, () => {
