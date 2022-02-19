@@ -15,14 +15,34 @@ export const List = styled.ul`
   margin: 0 auto;
   width: 100%;
   height: 93%;
+  padding: 0 2rem;
 `;
 
 export const Room = styled.li`
   font-size: 1.2rem;
   margin: 1rem auto;
   cursor: pointer;
-  :hover {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  div:hover {
     text-decoration: underline;
+  }
+`;
+
+export const DeleteRoom = styled.button`
+  outline: none;
+  border: none;
+  background: red;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 20px;
+  padding: 5px 10px;
+
+  :active {
+    transform: scale(0.9);
   }
 `;
 

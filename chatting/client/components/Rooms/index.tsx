@@ -49,11 +49,17 @@ export default function Rooms({ socket }: RoomsProps) {
     else socket.emit("JOINED_ROOM", { key, name, nickname });
   };
 
+  const deleteRoom = (key: string) => {
+    const password = prompt("방의 비밀번호를 입력해주세요");
+    socket.emit("DELETE_ROOM", { key, password });
+  };
+
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!nickname) alert("nickname을 입력해주세요");
     else {
-      socket.emit("CREATE_ROOM", { roomName });
+      const password = prompt("방의 비밀번호를 입력해주세요");
+      socket.emit("CREATE_ROOM", { roomName, password });
       setRoomName("");
     }
   };
@@ -62,8 +68,11 @@ export default function Rooms({ socket }: RoomsProps) {
     <S.RoomsWrapper>
       <S.List>
         {rooms.map(({ key, name }) => (
-          <S.Room key={key} onClick={() => joinRoom(key, name)}>
-            {name}
+          <S.Room key={key}>
+            <div onClick={() => joinRoom(key, name)}>{name}</div>
+            <S.DeleteRoom onClick={() => deleteRoom(key)}>
+              방 지우기
+            </S.DeleteRoom>
           </S.Room>
         ))}
       </S.List>

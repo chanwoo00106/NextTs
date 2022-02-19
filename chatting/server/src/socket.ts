@@ -14,14 +14,16 @@ const EVENTS = {
   LEAVE_ROOM: "LEAVE_ROOM",
   JOINED_MESSAGE: "JOINED_MESSAGE",
   LEAVE_ROOM_MESSAGE: "LEAVE_ROOM_MESSAGE",
+  DELETE_ROOM: "DELETE_ROOM",
 };
 
 interface RoomType {
   key: string;
   name: string;
+  password: string;
 }
 
-const rooms: RoomType[] = [];
+let rooms: RoomType[] = [];
 
 function socket({ io }: { io: Server }) {
   logger.info(`Sockets enabled`);
@@ -33,9 +35,9 @@ function socket({ io }: { io: Server }) {
       socket.emit(EVENTS.GET_ROOMS, { rooms });
     });
 
-    socket.on(EVENTS.CREATE_ROOM, ({ roomName }) => {
+    socket.on(EVENTS.CREATE_ROOM, ({ roomName, password }) => {
       const key = nanoid();
-      rooms.push({ key, name: roomName });
+      rooms.push({ key, name: roomName, password });
       socket.emit(EVENTS.NEW_ROOM, { key, name: roomName });
       socket.broadcast.emit(EVENTS.NEW_ROOM, { key, name: roomName });
       socket.join(key);
@@ -73,10 +75,13 @@ function socket({ io }: { io: Server }) {
 
     socket.on(EVENTS.LEAVE_ROOM, ({ key, nickname }) => {
       socket.leave(key);
-      console.log(key);
       socket.broadcast.to(key).emit(EVENTS.LEAVE_ROOM_MESSAGE, {
         message: `${nickname}님이 방을 나가셨습니다`,
       });
+    });
+
+    socket.on(EVENTS.DELETE_ROOM, ({ key, password }) => {
+      rooms = rooms.filter((i) => i.key !== key && i.password !== password);
     });
 
     socket.on(EVENTS.disconnect, () => {
