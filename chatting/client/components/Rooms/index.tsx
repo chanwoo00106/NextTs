@@ -18,6 +18,9 @@ interface RoomsI {
 export default function Rooms({ socket }: RoomsProps) {
   const [rooms, setRooms] = useState<{ key: string; name: string }[]>([]);
   const [roomName, setRoomName] = useState<string>("");
+  const { nickname } = useSelector((state: RootState) => ({
+    nickname: state.myRoom.nickname,
+  }));
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -42,13 +45,17 @@ export default function Rooms({ socket }: RoomsProps) {
     setRoomName(e.target.value);
 
   const joinRoom = (key: string, name: string) => {
-    socket.emit("JOINED_ROOM", { key, name });
+    if (!nickname) alert("nickname을 입력해주세요");
+    else socket.emit("JOINED_ROOM", { key, name });
   };
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    socket.emit("CREATE_ROOM", { roomName });
-    setRoomName("");
+    if (!nickname) alert("nickname을 입력해주세요");
+    else {
+      socket.emit("CREATE_ROOM", { roomName });
+      setRoomName("");
+    }
   };
 
   return (
@@ -66,9 +73,7 @@ export default function Rooms({ socket }: RoomsProps) {
           value={roomName}
           onChange={onChange}
           maxLength={10}
-          max={10}
           minLength={1}
-          min={1}
           type="text"
         />
         <S.Button type="submit" disabled={!roomName.trim()}>

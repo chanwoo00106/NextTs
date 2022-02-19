@@ -11,17 +11,23 @@ interface ChattingProps {
   socket: Socket;
 }
 
+interface MessagesI {
+  message: string;
+  nickname: string;
+}
+
 export default function Chatting({ socket }: ChattingProps) {
   const [message, setMessage] = useState<string>("");
-  const [messages, setMessages] = useState<string[]>([]);
-  const { key } = useSelector((state: RootState) => ({
+  const [messages, setMessages] = useState<MessagesI[]>([]);
+  const { key, nickname } = useSelector((state: RootState) => ({
     key: state.myRoom.key,
+    nickname: state.myRoom.nickname,
   }));
 
   useMemo(() => {
-    socket.on("GET_MESSAGE", ({ message }) => {
+    socket.on("GET_MESSAGE", ({ message, nickname }) => {
       setMessages((msg) => {
-        return [...msg, message];
+        return [...msg, { message, nickname }];
       });
     });
   }, []);
@@ -31,16 +37,18 @@ export default function Chatting({ socket }: ChattingProps) {
 
   const sendMessage = (e: FormEvent) => {
     e.preventDefault();
-    socket.emit("SEND_MESSAGE", { message, key });
-    setMessages([...messages, message]);
+    socket.emit("SEND_MESSAGE", { message, key, nickname });
+    setMessages([...messages, { message, nickname: "Me" }]);
     setMessage("");
   };
 
   return (
     <RoomS.RoomsWrapper>
       <S.List>
-        {messages.map((message, i) => (
-          <S.Room key={i}>{message}</S.Room>
+        {messages.map(({ message, nickname }, i) => (
+          <S.Room key={i}>
+            {nickname} | {message}
+          </S.Room>
         ))}
       </S.List>
       <RoomS.SendForm onSubmit={sendMessage}>

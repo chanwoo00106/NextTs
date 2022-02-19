@@ -49,8 +49,8 @@ function socket({ io }: { io: Server }) {
       socket.leave(key);
     });
 
-    socket.on(EVENTS.SEND_MESSAGE, ({ message, key }) => {
-      socket.broadcast.to(key).emit(EVENTS.GET_MESSAGE, { message });
+    socket.on(EVENTS.SEND_MESSAGE, ({ message, key, nickname }) => {
+      socket.broadcast.to(key).emit(EVENTS.GET_MESSAGE, { message, nickname });
     });
 
     socket.on(EVENTS.disconnect, () => {

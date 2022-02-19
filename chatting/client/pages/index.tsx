@@ -27,7 +27,7 @@ const Home: NextPage = () => {
   };
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) =>
-    dispatch(change_nickname(e.target.value));
+    dispatch(change_nickname(e.target.value.trim()));
 
   return (
     <HomeWrapper>
