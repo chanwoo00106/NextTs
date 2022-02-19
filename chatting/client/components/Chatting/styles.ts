@@ -20,7 +20,7 @@ export const Nickname = styled.p`
 
 export const Message = styled.div`
   color: white;
-  border-radius: 10px;
+  border-radius: 20px;
   display: inline-block;
   padding: 5px 10px;
 `;

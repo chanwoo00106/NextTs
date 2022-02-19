@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { ChangeEvent, FormEvent, useMemo, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { Socket } from "socket.io-client";
 import { RootState } from "../../modules";
@@ -25,6 +25,14 @@ export default function Chatting({ socket }: ChattingProps) {
     nickname: state.myRoom.nickname,
   }));
 
+  useEffect(() => {
+    setTimeout(() => {
+      const scroll = document.querySelector("ul.messages");
+      scroll?.scrollIntoView({ behavior: "smooth" });
+      scroll!.scrollTop = scroll!.scrollHeight;
+    }, 10);
+  }, [messages]);
+
   useMemo(() => {
     socket.on("GET_MESSAGE", ({ message, nickname }) => {
       setMessages((msg) => {
@@ -45,7 +53,7 @@ export default function Chatting({ socket }: ChattingProps) {
 
   return (
     <RoomS.RoomsWrapper>
-      <S.List>
+      <S.List className="messages">
         {messages.map(({ message, nickname, textAlign }, i) => (
           <S.Room style={{ textAlign }} key={i}>
             <S.Nickname>{nickname}</S.Nickname>
