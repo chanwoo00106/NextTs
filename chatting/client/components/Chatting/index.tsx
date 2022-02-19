@@ -13,8 +13,8 @@ interface ChattingProps {
 
 interface MessagesI {
   message: string;
-  nickname: string;
-  textAlign: "left" | "right";
+  nickname?: string;
+  textAlign: "left" | "right" | "center";
 }
 
 export default function Chatting({ socket }: ChattingProps) {
@@ -39,6 +39,12 @@ export default function Chatting({ socket }: ChattingProps) {
         return [...msg, { message, nickname, textAlign: "right" }];
       });
     });
+
+    socket.on("JOINED_MESSAGE", ({ message }) => {
+      setMessages((msg) => {
+        return [...msg, { message, textAlign: "center" }];
+      });
+    });
   }, []);
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) =>
@@ -57,13 +63,17 @@ export default function Chatting({ socket }: ChattingProps) {
         {messages.map(({ message, nickname, textAlign }, i) => (
           <S.Room style={{ textAlign }} key={i}>
             <S.Nickname>{nickname}</S.Nickname>
-            <S.Message
-              style={{
-                background: textAlign === "left" ? "#2ed573" : "#1e90ff",
-              }}
-            >
-              {message}
-            </S.Message>
+            {nickname ? (
+              <S.Message
+                style={{
+                  background: textAlign === "left" ? "#2ed573" : "#1e90ff",
+                }}
+              >
+                {message}
+              </S.Message>
+            ) : (
+              <S.Message style={{ color: "#000" }}>{message}</S.Message>
+            )}
           </S.Room>
         ))}
       </S.List>

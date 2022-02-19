@@ -46,7 +46,7 @@ export default function Rooms({ socket }: RoomsProps) {
 
   const joinRoom = (key: string, name: string) => {
     if (!nickname) alert("nickname을 입력해주세요");
-    else socket.emit("JOINED_ROOM", { key, name });
+    else socket.emit("JOINED_ROOM", { key, name, nickname });
   };
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {

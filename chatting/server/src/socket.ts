@@ -12,6 +12,7 @@ const EVENTS = {
   NEW_ROOM: "NEW_ROOM",
   JOINED_ROOM: "JOINED_ROOM",
   LEAVE_ROOM: "LEAVE_ROOM",
+  JOINED_MESSAGE: "JOINED_MESSAGE",
 };
 
 interface RoomType {
@@ -40,10 +41,30 @@ function socket({ io }: { io: Server }) {
       socket.emit(EVENTS.JOINED_ROOM, { key, name: roomName });
     });
 
-    socket.on(EVENTS.JOINED_ROOM, ({ key, name }: RoomType) => {
-      socket.join(key);
-      socket.emit(EVENTS.JOINED_ROOM, { key, name });
-    });
+    socket.on(
+      EVENTS.JOINED_ROOM,
+      ({
+        key,
+        name,
+        nickname,
+      }: {
+        key: string;
+        name: string;
+        nickname: string;
+      }) => {
+        socket.join(key);
+
+        socket.emit(EVENTS.JOINED_ROOM, { key, name });
+
+        socket.broadcast.to(key).emit(EVENTS.JOINED_MESSAGE, {
+          message: `${nickname}님이 방에 참가했습니다`,
+        });
+
+        socket.emit(EVENTS.JOINED_MESSAGE, {
+          message: `${nickname}님이 방에 참가했습니다`,
+        });
+      }
+    );
 
     socket.on(EVENTS.LEAVE_ROOM, (key: string) => {
       socket.leave(key);

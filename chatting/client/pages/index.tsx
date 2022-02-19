@@ -22,7 +22,7 @@ const Home: NextPage = () => {
   const dispatch = useDispatch();
 
   const leaveRoom = () => {
-    socket.emit("LEAVE_ROOM", { key });
+    socket.emit("LEAVE_ROOM", { key, nickname });
     dispatch(leave_room());
   };
 
