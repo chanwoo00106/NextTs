@@ -13,9 +13,9 @@ const corsOrigin = config.get<string>("corsOrigin");
 
 const app = express();
 
-const httpServer = createServer(app);
+const server = createServer(app);
 
-const io = new Server(httpServer, {
+const io = new Server(server, {
   cors: {
     origin: corsOrigin,
     credentials: true,
@@ -23,10 +23,10 @@ const io = new Server(httpServer, {
 });
 
 app.get("/", (req, res) => {
-  res.send(`chat server ${version}`);
+  res.send("<h1>Hello world!</h1>");
 });
 
-httpServer.listen(port, host, () => {
+server.listen(port, () => {
   log.info(`🏃 Server version ${version} is listening 🏃`);
   log.info(`http://${host}:${port}`);
   socket({ io });
