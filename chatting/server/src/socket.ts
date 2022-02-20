@@ -81,9 +81,18 @@ function socket({ io }: { io: Server }) {
     });
 
     socket.on(EVENTS.DELETE_ROOM, ({ key, password }) => {
-      rooms = rooms.filter((i) => i.key !== key && i.password !== password);
-      socket.emit(EVENTS.DELETE_ROOM, { key });
-      socket.broadcast.emit(EVENTS.DELETE_ROOM, { key });
+      let send: boolean = true;
+      rooms = rooms.filter((i) => {
+        if (i.key === key) {
+          if (i.password !== password) send = false;
+          return i.password !== password;
+        } else return false;
+      });
+
+      if (send) {
+        socket.emit(EVENTS.DELETE_ROOM, { key });
+        socket.broadcast.emit(EVENTS.DELETE_ROOM, { key });
+      }
     });
 
     socket.on(EVENTS.disconnect, () => {

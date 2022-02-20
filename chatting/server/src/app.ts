@@ -22,9 +22,12 @@ const io = new Server(httpServer, {
   },
 });
 
-socket({ io });
+app.get("/", (req, res) => {
+  res.send(`chat server ${version}`);
+});
 
 httpServer.listen(port, host, () => {
   log.info(`🏃 Server version ${version} is listening 🏃`);
   log.info(`http://${host}:${port}`);
+  socket({ io });
 });

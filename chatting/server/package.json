@@ -15,7 +15,8 @@
     "socket.io": "^4.4.1"
   },
   "scripts": {
-    "dev": "nodemon --config nodemon.json src/app.ts"
+    "dev": "nodemon --config nodemon.json src/app.ts",
+    "start": "ts-node ./src/app.ts"
   },
   "devDependencies": {
     "@types/config": "^0.0.41",
