@@ -43,6 +43,9 @@
   margin: 0;
   line-height: 1.15;
   font-size: 4rem;
+  opacity: 0;
+  position: relative;
+  top: 1rem;
 }
 
 .title,
@@ -54,6 +57,9 @@
   margin: 4rem 0;
   line-height: 1.5;
   font-size: 1.5rem;
+  opacity: 0;
+  position: relative;
+  top: 1rem;
 }
 
 .code {
