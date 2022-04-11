@@ -1,12 +1,9 @@
-import { Box } from "@chakra-ui/react";
+import { Box, useColorMode } from "@chakra-ui/react";
 import type { NextPage } from "next";
 
 const Home: NextPage = () => {
-  return (
-    <Box height="100vh" background="gray.200">
-      hello world
-    </Box>
-  );
+  const { toggleColorMode } = useColorMode();
+  return <Box height="100vh" onClick={toggleColorMode}></Box>;
 };
 
 export default Home;
