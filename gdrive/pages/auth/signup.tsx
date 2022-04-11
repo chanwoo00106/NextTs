@@ -1,5 +1,11 @@
-import React from "react";
+import LoginPage from "../../components/LoginPage";
+import Header from "../../components/Header";
 
 export default function signup() {
-  return <div>signup</div>;
+  return (
+    <>
+      <Header />
+      <LoginPage type="SignUp" />
+    </>
+  );
 }

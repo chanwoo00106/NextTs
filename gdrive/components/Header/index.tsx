@@ -12,7 +12,7 @@ export default function MainPage() {
 
   return (
     <Box
-      height="3rem"
+      height="4rem"
       position="fixed"
       top={0}
       left={0}
