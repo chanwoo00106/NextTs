@@ -4,6 +4,7 @@ import {
   Flex,
   FormControl,
   Input,
+  useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
 import { useRef, useState } from "react";
@@ -27,10 +28,12 @@ export default function FileForm() {
     // TODO 파일 업로드 api 요청
   };
   const { register, handleSubmit } = useForm();
+  const background = useColorModeValue("gray.300", "gray.700");
+  const btnColor = useColorModeValue("blue.300", "blue.700");
 
   return (
     <Flex height="100vh" justifyContent="center" alignItems="center">
-      <Flex direction="column" p={12} rounded={6} background="gray.400">
+      <Flex direction="column" p={12} rounded={6} background={background}>
         <FormControl
           as="form"
           display="flex"
@@ -55,7 +58,8 @@ export default function FileForm() {
             <Button
               size="lg"
               onClick={() => FileRef.current?.click()}
-              colorScheme="blue"
+              color="white"
+              background={btnColor}
             >
               파일 선택
             </Button>
@@ -64,7 +68,6 @@ export default function FileForm() {
           <Input
             {...register("name")}
             placeholder="파일 이름 입력 (선택)"
-            background="white"
             width="25rem"
           />
           <Button width="10rem" type="submit">

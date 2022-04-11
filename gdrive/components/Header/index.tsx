@@ -1,4 +1,11 @@
-import { Box, Flex, Input } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Input,
+  Switch,
+  useColorMode,
+  useColorModeValue,
+} from "@chakra-ui/react";
 import Link from "next/link";
 import React from "react";
 import { AiOutlineUser } from "react-icons/ai";
@@ -9,6 +16,7 @@ export default function MainPage() {
   const { register, handleSubmit } = useForm();
   const router = useRouter();
   const onSubmit = ({ search }: any) => router.push(`/file/${search}`);
+  const { toggleColorMode } = useColorMode();
 
   return (
     <Box
@@ -32,6 +40,7 @@ export default function MainPage() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <Input {...register("search")} placeholder="파일 검색" />
         </form>
+        <Switch colorScheme="gray.200" size="lg" onChange={toggleColorMode} />
         <Link href="/my">
           <a>
             <AiOutlineUser size="2rem" />

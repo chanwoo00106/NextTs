@@ -1,4 +1,11 @@
-import { Button, Flex, Heading, Input, Text } from "@chakra-ui/react";
+import {
+  Button,
+  Flex,
+  Heading,
+  Input,
+  Text,
+  useColorModeValue,
+} from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 
 interface LoginPageProps {
@@ -10,13 +17,14 @@ export default function LoginPage({ type }: LoginPageProps) {
   const onSubmit = async (data: any) => {
     if (data.password === data.pw) console.log("first");
   };
+  const background = useColorModeValue("gray.200", "gray.700");
 
   return (
     <Flex height="100vh" justifyContent="center" alignItems="center">
       <Flex
         as="form"
         direction="column"
-        background="gray.300"
+        background={background}
         p="25"
         rounded={6}
         onSubmit={handleSubmit(onSubmit)}
