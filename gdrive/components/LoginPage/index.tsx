@@ -6,6 +6,7 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 
 interface LoginPageProps {
@@ -13,6 +14,7 @@ interface LoginPageProps {
 }
 
 export default function LoginPage({ type }: LoginPageProps) {
+  const router = useRouter();
   const { register, handleSubmit } = useForm();
   const onSubmit = async (data: any) => {
     if (data.password === data.pw) console.log("first");
@@ -43,10 +45,26 @@ export default function LoginPage({ type }: LoginPageProps) {
           <Input
             {...register("pw")}
             type="password"
-            mb={6}
+            mb={3}
             placeholder="비밀번호 확인"
           />
         )}
+        <Text fontSize="sm" textAlign="right" mb={6}>
+          <span
+            style={{ cursor: "pointer" }}
+            onClick={() =>
+              router.push(
+                `/auth/${
+                  type === "SignIn"
+                    ? "SignUp".toLowerCase()
+                    : "SignIn".toLowerCase()
+                }`
+              )
+            }
+          >
+            {type === "SignIn" ? "SignUp" : "SignIn"}
+          </span>
+        </Text>
         <Button type="submit" colorScheme="teal">
           {type}
         </Button>
