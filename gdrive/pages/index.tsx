@@ -5,11 +5,13 @@ import Header from "../components/Header";
 import { api } from "../lib/api";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const cookie = ctx.req.cookies["accessToken"];
+  const access = ctx.req.cookies["accessToken"];
+  const refresh = ctx.req.cookies["accessToken"];
+
   try {
     const { data } = await api.get("/auth/check", {
       headers: {
-        cookie: cookie ? cookie : "",
+        cookie: access ? access : "",
       },
     });
 
