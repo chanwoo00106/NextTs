@@ -1,17 +1,39 @@
-import axios from "axios";
 import type { GetServerSideProps, NextPage } from "next";
 import FileForm from "../components/FileForm";
 import Header from "../components/Header";
 import { api } from "../lib/api";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const access = ctx.req.cookies["accessToken"];
-  const refresh = ctx.req.cookies["accessToken"];
+  let accessToken = ctx.req.cookies["accessToken"]
+  let refreshToken = ctx.req.cookies["refreshToken"];
 
   try {
-    const { data } = await api.get("/auth/check", {
+    if (!accessToken) {
+      const { data } = await api.post(
+        "/auth/refresh",
+        {},
+        {
+          headers: {
+            cookie: refreshToken ? refreshToken : "",
+          },
+          withCredentials: true,
+        }
+      );
+      
+      ctx.res.setHeader(
+        'set-cookie',
+        [`accessToken=${data.accessToken}; HttpOnly; Expires=${new Date(data.AtExpiredAt).toUTCString()};`, `refreshToken=${data.refreshToken}; HttpOnly; Expires=${new Date(data.RtExpiredAt).toUTCString()};`]
+      );
+      
+      return {
+        props: {
+          isLogined: true,
+        }
+      }
+    }
+    await api.get("/auth/check", {
       headers: {
-        cookie: access ? access : "",
+        cookie: accessToken ? accessToken : "",
       },
     });
 
@@ -34,6 +56,7 @@ interface HomeProps {
 }
 
 const Home: NextPage<HomeProps> = ({ isLogined }) => {
+
   return (
     <>
       <Header />
