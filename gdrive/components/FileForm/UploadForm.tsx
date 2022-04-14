@@ -9,26 +9,36 @@ import {
 } from "@chakra-ui/react";
 import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import { api } from "../../lib/api";
+import { errorToast } from "../../lib/errorToast";
 
 export default function UploadForm() {
+  const { register, handleSubmit } = useForm();
+  const btnColor = useColorModeValue("blue.300", "blue.700");
   const FileRef = useRef<HTMLInputElement>(null);
   const [fileName, setFileName] = useState<string>();
   const toast = useToast();
+
   const onSubmit = async (data: any) => {
     if (FileRef.current?.files?.length === 0 || !FileRef.current?.files) {
-      toast({
-        title: "파일을 추가해주세요",
-        status: "error",
-        duration: 1000,
-        isClosable: true,
-        position: "top-right",
-      });
+      toast(errorToast("파일을 추가해주세요"));
       return;
     }
-    // TODO 파일 업로드 api 요청
+
+    try {
+      await api.post(
+        "/upload",
+        { name: data.name, file: FileRef.current.files[0] },
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+          withCredentials: true,
+        }
+      );
+    } catch (e) {
+      console.log(e);
+      toast(errorToast("업로드 실패"));
+    }
   };
-  const { register, handleSubmit } = useForm();
-  const btnColor = useColorModeValue("blue.300", "blue.700");
 
   return (
     <FormControl

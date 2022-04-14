@@ -4,7 +4,7 @@ import Header from "../components/Header";
 import { api } from "../lib/api";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  let accessToken = ctx.req.cookies["accessToken"]
+  let accessToken = ctx.req.cookies["accessToken"];
   let refreshToken = ctx.req.cookies["refreshToken"];
 
   try {
@@ -19,17 +19,21 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
           withCredentials: true,
         }
       );
-      
-      ctx.res.setHeader(
-        'set-cookie',
-        [`accessToken=${data.accessToken}; HttpOnly; Expires=${new Date(data.AtExpiredAt).toUTCString()};`, `refreshToken=${data.refreshToken}; HttpOnly; Expires=${new Date(data.RtExpiredAt).toUTCString()};`]
-      );
-      
+
+      ctx.res.setHeader("set-cookie", [
+        `accessToken=${data.accessToken}; HttpOnly; Expires=${new Date(
+          data.AtExpiredAt
+        ).toUTCString()};`,
+        `refreshToken=${data.refreshToken}; HttpOnly; Expires=${new Date(
+          data.RtExpiredAt
+        ).toUTCString()};`,
+      ]);
+
       return {
         props: {
           isLogined: true,
-        }
-      }
+        },
+      };
     }
     await api.get("/auth/check", {
       headers: {
@@ -56,7 +60,6 @@ interface HomeProps {
 }
 
 const Home: NextPage<HomeProps> = ({ isLogined }) => {
-
   return (
     <>
       <Header />
