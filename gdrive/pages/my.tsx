@@ -11,6 +11,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
     const { data }: { data: UserFiles } = await api.get("/my", {
       headers: { cookie: `accessToken=${accessToken};` },
+      withCredentials: true,
     });
 
     return {

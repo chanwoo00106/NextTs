@@ -25,18 +25,18 @@ export default function UploadForm() {
       return;
     }
 
+    const formData = new FormData();
+
+    formData.append("name", data.name);
+    formData.append("file", FileRef.current.files[0]);
+
     try {
-      await api.post(
-        "/upload",
-        { name: data.name, file: FileRef.current.files[0] },
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-          withCredentials: true,
-        }
-      );
-    } catch (e) {
-      console.log(e);
-      toast(errorToast("업로드 실패"));
+      await api.post("/upload", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+        withCredentials: true,
+      });
+    } catch (e: any) {
+      console.log(e.response);
     }
   };
 

@@ -34,9 +34,13 @@ export default function LoginPage({ type }: LoginPageProps) {
       return;
     }
     try {
-      await api.post(`/auth/${type.toLowerCase()}`, {
-        ...data,
-      });
+      await api.post(
+        `/auth/${type.toLowerCase()}`,
+        {
+          ...data,
+        },
+        { withCredentials: true }
+      );
       toast({
         title: "성공!",
         isClosable: true,
