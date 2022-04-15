@@ -1,7 +1,9 @@
 import { GetServerSidePropsContext } from "next";
 import { api } from "./api";
 
-const checkUser = async (ctx: GetServerSidePropsContext): Promise<string> => {
+const checkUser = async (
+  ctx: GetServerSidePropsContext
+): Promise<[boolean, string]> => {
   let accessToken: string = ctx.req.cookies["accessToken"];
   let refreshToken: string = ctx.req.cookies["refreshToken"];
 
@@ -12,7 +14,7 @@ const checkUser = async (ctx: GetServerSidePropsContext): Promise<string> => {
         {},
         {
           headers: {
-            cookie: refreshToken ? refreshToken : "",
+            cookie: `refreshToken=${refreshToken};`,
           },
           withCredentials: true,
         }
@@ -29,11 +31,9 @@ const checkUser = async (ctx: GetServerSidePropsContext): Promise<string> => {
         ).toUTCString()};`,
       ]);
 
-      return data.accessToken;
-    } else if (!refreshToken) {
-      throw new Error();
-    }
-    return accessToken;
+      return [true, accessToken];
+    } else if (!refreshToken) throw new Error();
+    return [false, accessToken];
   } catch (e: any) {
     throw new Error(e);
   }

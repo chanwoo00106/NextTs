@@ -7,10 +7,10 @@ import { Files, UserFiles } from "../types/UserFiles";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   try {
-    const accessToken: string = await checkUser(ctx);
+    const [_, accessToken] = await checkUser(ctx);
 
     const { data }: { data: UserFiles } = await api.get("/my", {
-      headers: { cookie: accessToken },
+      headers: { cookie: `accessToken=${accessToken};` },
     });
 
     return {
