@@ -4,8 +4,10 @@ import { api } from "./api";
 const checkUser = async (
   ctx: GetServerSidePropsContext
 ): Promise<[boolean, string]> => {
-  const accessToken: string = ctx.req.cookies["accessToken"];
+  const accessToken = ctx.req.cookies["accessToken"];
   const refreshToken: string = ctx.req.cookies["refreshToken"];
+
+  console.log(accessToken);
 
   try {
     if (!accessToken) {

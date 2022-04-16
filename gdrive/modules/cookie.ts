@@ -1,9 +1,12 @@
 const SET_COOKIE = "cookie/SET_COOKIE" as const;
 const CLEAR_COOKIE = "cookie/CLEAR_COOKIE" as const;
 
-export const set_cookie = (cookie: string) => ({
+export const set_cookie = (cookie: string, expiredAt: string) => ({
   type: SET_COOKIE,
-  cookie,
+  payload: {
+    cookie,
+    expiredAt,
+  },
 });
 
 export const clear_cookie = () => ({
@@ -12,14 +15,22 @@ export const clear_cookie = () => ({
 
 type ActionType = ReturnType<typeof set_cookie | typeof clear_cookie>;
 
-const initialState: string = "";
+interface InitialStateType {
+  cookie: string;
+  expiredAt: string;
+}
 
-function cookie(state = initialState, action: ActionType): string {
+const initialState: InitialStateType = {
+  cookie: "",
+  expiredAt: "",
+};
+
+function cookie(state = initialState, action: ActionType): InitialStateType {
   switch (action.type) {
     case SET_COOKIE:
-      return action.cookie;
+      return { ...action.payload };
     case CLEAR_COOKIE:
-      return "";
+      return { cookie: "", expiredAt: "" };
     default:
       return state;
   }
