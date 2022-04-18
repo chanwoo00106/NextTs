@@ -3,37 +3,31 @@ import { api } from "../lib/api";
 import checkUser from "../lib/checkUser";
 import Header from "../components/Header";
 import { Files, UserFiles } from "../types/UserFiles";
-import wrapper from "../modules";
+import { GetServerSideProps } from "next";
 
-export const getServerSideProps = wrapper.getServerSideProps(
-  (store) => async (ctx) => {
-    const state = store.getState().cookie;
-    console.log(state);
-    try {
-      const [_, accessToken] = await checkUser(ctx, store, state);
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  try {
+    const [_, accessToken] = await checkUser(ctx);
 
-      console.log(accessToken);
+    const { data }: { data: UserFiles } = await api.get("/my", {
+      headers: { cookie: `accessToken=${accessToken};` },
+      withCredentials: true,
+    });
 
-      const { data }: { data: UserFiles } = await api.get("/my", {
-        headers: { cookie: `accessToken=${accessToken};` },
-        withCredentials: true,
-      });
-
-      return {
-        props: {
-          ...data,
-        },
-      };
-    } catch (e) {
-      return {
-        props: {},
-        redirect: {
-          destination: "/",
-        },
-      };
-    }
+    return {
+      props: {
+        ...data,
+      },
+    };
+  } catch (e) {
+    return {
+      props: {},
+      redirect: {
+        destination: "/",
+      },
+    };
   }
-);
+};
 
 interface MyProps {
   id: string;

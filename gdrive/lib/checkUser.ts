@@ -1,18 +1,15 @@
 import { GetServerSidePropsContext } from "next";
-import {} from "next-redux-wrapper";
-import { set_cookie } from "../modules/cookie";
 import { api } from "./api";
 
 const checkUser = async (
-  ctx: GetServerSidePropsContext,
-  store: any,
-  { cookie, expiredAt }: { cookie: string; expiredAt: string }
+  ctx: GetServerSidePropsContext
 ): Promise<[boolean, string]> => {
   const refreshToken: string = ctx.req.cookies["refreshToken"];
-  let accessToken = "";
+  let accessToken = ctx.req.cookies["accessToken"];
 
   try {
-    if (!expiredAt || new Date(expiredAt) <= new Date()) {
+    if (!refreshToken) throw new Error();
+    else if (!accessToken) {
       const { data } = await api.post(
         "/auth/refresh",
         {},
@@ -26,20 +23,22 @@ const checkUser = async (
 
       if (!data.accessToken) throw new Error("Not found cookie");
 
-      store.dispatch(
-        set_cookie(data.accessToken, new Date(data.AtExpiredAt).toString())
-      );
-
       ctx.res.setHeader(
         "set-cookie",
         `refreshToken=${data.refreshToken}; HttpOnly; Expires=${new Date(
           data.RtExpiredAt
         ).toUTCString()};`
       );
+      ctx.res.setHeader(
+        "set-cookie",
+        `accessToken=${data.accessToken}; HttpOnly; Expires=${new Date(
+          data.AtExpiredAt
+        ).toUTCString()};`
+      );
 
       return [true, accessToken];
     } else if (!refreshToken) throw new Error();
-    return [false, cookie];
+    return [false, accessToken];
   } catch (e: any) {
     throw new Error(e);
   }
