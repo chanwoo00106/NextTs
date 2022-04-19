@@ -1,9 +1,21 @@
-import { Container, Flex, Heading, Image, Link, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Container,
+  Flex,
+  Heading,
+  Image,
+  Link,
+  Text,
+  useToast,
+} from "@chakra-ui/react";
 import { api } from "../lib/api";
 import checkUser from "../lib/checkUser";
 import Header from "../components/Header";
 import { File, UserFiles } from "../types/UserFiles";
 import { GetServerSideProps } from "next";
+import { errorToast } from "../lib/errorToast";
+import { useState } from "react";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   try {
@@ -35,6 +47,23 @@ interface MyProps {
 }
 
 const My = ({ id, files }: MyProps) => {
+  const toast = useToast();
+  const [Files, setFiles] = useState<File[]>(files);
+  const onRemove = async (fileName: string) => {
+    try {
+      await api.delete(`/file/${fileName}`, { withCredentials: true });
+      toast({
+        isClosable: true,
+        position: "top-right",
+        status: "success",
+        title: "삭제 성공",
+        duration: 2000,
+      });
+      setFiles(Files.filter((i) => i.name !== fileName));
+    } catch (e) {
+      toast(errorToast("삭제 실패"));
+    }
+  };
   return (
     <>
       <Header />
@@ -47,14 +76,8 @@ const My = ({ id, files }: MyProps) => {
           gap="2rem"
           justifyContent="center"
         >
-          {files?.map((file) => (
-            <Link
-              href={file.url}
-              key={file.id}
-              background="#fff"
-              p="2rem"
-              rounded="1rem"
-            >
+          {Files?.map((file) => (
+            <Box key={file.id} background="#fff" p="2rem" rounded="1rem">
               {file.mimetype.includes("image") ||
               file.mimetype.includes("video") ? (
                 <>
@@ -63,12 +86,7 @@ const My = ({ id, files }: MyProps) => {
                   )}
                   {file.mimetype.includes("video") && (
                     <video controls>
-                      <source
-                        src="/media/cc0-videos/flower.webm"
-                        type="video/webm"
-                      />
-
-                      <source src={file.url} type="video/mp4" />
+                      <source src={file.url} type={file.mimetype} />
                     </video>
                   )}
                 </>
@@ -76,10 +94,15 @@ const My = ({ id, files }: MyProps) => {
                 <Image src="/file.png" alt="file" />
               )}
 
-              <Text textAlign="center" mt={3}>
-                {file.name}
-              </Text>
-            </Link>
+              <Link href={file.url}>
+                <Text fontSize="1.2rem" textAlign="center" mt={3}>
+                  {file.name}
+                </Text>
+              </Link>
+              <Flex justifyContent="center" mt={5}>
+                <Button onClick={() => onRemove(file.name)}>파일 제거</Button>
+              </Flex>
+            </Box>
           ))}
         </Flex>
       </Container>
