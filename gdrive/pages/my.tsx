@@ -35,7 +35,6 @@ interface MyProps {
 }
 
 const My = ({ id, files }: MyProps) => {
-  console.log(files);
   return (
     <>
       <Header />

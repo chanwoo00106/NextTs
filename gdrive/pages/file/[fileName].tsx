@@ -3,6 +3,7 @@ import { GetServerSideProps } from "next";
 import { api } from "../../lib/api";
 import { File } from "../../types/UserFiles";
 import Header from "../../components/Header";
+import Error from "../../components/Error";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   try {
@@ -41,7 +42,7 @@ type FileProps =
     };
 
 export default function FileView({ data, error }: FileProps) {
-  if (error) return <div>error</div>;
+  if (error) return <Error />;
 
   return (
     <>
