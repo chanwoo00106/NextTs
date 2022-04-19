@@ -1,9 +1,9 @@
 export interface UserFiles {
   id: string;
-  files: Files[];
+  files: File[];
 }
 
-export interface Files {
+export interface File {
   id: number;
   url: string;
   name: string;

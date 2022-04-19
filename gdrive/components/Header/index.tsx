@@ -1,11 +1,4 @@
-import {
-  Box,
-  Flex,
-  Input,
-  Switch,
-  useColorMode,
-  useColorModeValue,
-} from "@chakra-ui/react";
+import { Box, Flex, Input, Switch, useColorMode } from "@chakra-ui/react";
 import Link from "next/link";
 import React from "react";
 import { AiOutlineUser } from "react-icons/ai";
@@ -30,6 +23,7 @@ export default function MainPage() {
       alignItems="center"
       padding="0 3rem"
       gap="2rem"
+      background="gray.100"
     >
       <Link href="/">
         <a>

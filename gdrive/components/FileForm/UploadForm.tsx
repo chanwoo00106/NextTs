@@ -35,8 +35,15 @@ export default function UploadForm() {
         headers: { "Content-Type": "multipart/form-data" },
         withCredentials: true,
       });
+      toast({
+        isClosable: true,
+        title: "업로드 성공",
+        position: "top-right",
+        status: "success",
+        duration: 2000,
+      });
     } catch (e: any) {
-      console.log(e.response);
+      toast(errorToast("업로드 실패"));
     }
   };
 

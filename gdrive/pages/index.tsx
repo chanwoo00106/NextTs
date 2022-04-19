@@ -21,8 +21,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       },
     };
   } catch (e: any) {
-    if (e.isAxiosError) console.log(e.response.data);
-
     return { props: { isLogined: false } };
   }
 };
