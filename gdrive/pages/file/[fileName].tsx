@@ -1,4 +1,4 @@
-import { Flex, Heading, Image } from "@chakra-ui/react";
+import { Flex, Heading, Image, Link } from "@chakra-ui/react";
 import { GetServerSideProps } from "next";
 import { api } from "../../lib/api";
 import { File } from "../../types/UserFiles";
@@ -47,24 +47,31 @@ export default function FileView({ data, error }: FileProps) {
   return (
     <>
       <Header />
-      <Flex mt="6rem" justifyContent="center">
+      <Flex
+        justifyContent="center"
+        alignItems="center"
+        flexDir="column"
+        width="100%"
+        height="100vh"
+      >
         {data.mimetype.includes("image") || data.mimetype.includes("video") ? (
           <>
             {data.mimetype.includes("image") && (
-              <Image src={data.url} alt={data.name} />
+              <Image src={data.url} alt={data.name} maxW={500} maxH={500} />
             )}
-            {data.mimetype.includes("video") && (
-              <video controls>
-                <source src="/media/cc0-videos/flower.webm" type="video/webm" />
 
-                <source src={data.url} type="video/mp4" />
+            {data.mimetype.includes("video") && (
+              <video controls style={{ maxWidth: "500px", maxHeight: "500px" }}>
+                <source src={data.url} type={data.mimetype} />
               </video>
             )}
           </>
         ) : (
-          <Image src="/file.png" alt="file" />
+          <Image src="/file.png" alt="file" maxH={300} maxW={300} />
         )}
-        <Heading>{data.name}</Heading>
+        <Link mt={5} href={data.url}>
+          <Heading>{data.name}</Heading>
+        </Link>
       </Flex>
     </>
   );

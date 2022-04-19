@@ -1,4 +1,11 @@
-import { Box, Flex, Input, Switch, useColorMode } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Input,
+  Switch,
+  useColorMode,
+  useColorModeValue,
+} from "@chakra-ui/react";
 import Link from "next/link";
 import React from "react";
 import { AiOutlineUser } from "react-icons/ai";
@@ -6,6 +13,7 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 
 export default function MainPage() {
+  const background = useColorModeValue("gray.100", "gray.800");
   const { register, handleSubmit } = useForm();
   const router = useRouter();
   const onSubmit = ({ search }: any) => router.push(`/file/${search}`);
@@ -23,7 +31,7 @@ export default function MainPage() {
       alignItems="center"
       padding="0 3rem"
       gap="2rem"
-      background="gray.100"
+      background={background}
     >
       <Link href="/">
         <a>
