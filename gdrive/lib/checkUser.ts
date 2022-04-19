@@ -36,7 +36,7 @@ const checkUser = async (
         ).toUTCString()};`
       );
 
-      return [true, accessToken];
+      return [true, data.accessToken];
     } else if (!refreshToken) throw new Error();
     return [false, accessToken];
   } catch (e: any) {

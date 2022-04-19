@@ -6,7 +6,9 @@ import checkUser from "../lib/checkUser";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   try {
-    const [_, accessToken] = await checkUser(ctx);
+    const [isrefresh, accessToken] = await checkUser(ctx);
+
+    if (isrefresh) return { props: { isLogined: true } };
 
     await api.get("/auth/check", {
       headers: { cookie: `accessToken=${accessToken};` },
@@ -19,9 +21,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       },
     };
   } catch (e: any) {
-    if (e.isAxiosError) {
-      console.log(e.response.data);
-    } else console.log(e);
+    if (e.isAxiosError) console.log(e.response.data);
 
     return { props: { isLogined: false } };
   }
