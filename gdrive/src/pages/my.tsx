@@ -7,6 +7,7 @@ import {
   Image,
   Link,
   Text,
+  useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
 import { api } from "../lib/api";
@@ -49,6 +50,7 @@ interface MyProps {
 
 const My = ({ id, files }: MyProps) => {
   const toast = useToast();
+  const backColor = useColorModeValue("white", "blackAlpha.400");
   const [Files, setFiles] = useState<File[]>(files);
   const onRemove = async (fileName: string) => {
     try {
@@ -81,7 +83,7 @@ const My = ({ id, files }: MyProps) => {
           justifyContent="center"
         >
           {Files?.map((file) => (
-            <Box key={file.id} background="#fff" p="2rem" rounded="1rem">
+            <Box key={file.id} background={backColor} p="2rem" rounded="1rem">
               {file.mimetype.includes("image") ||
               file.mimetype.includes("video") ? (
                 <>
