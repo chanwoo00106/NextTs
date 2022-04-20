@@ -16,6 +16,7 @@ import { File, UserFiles } from "../types/UserFiles";
 import { GetServerSideProps } from "next";
 import { errorToast } from "../lib/errorToast";
 import { useState } from "react";
+import { clientCheck } from "../lib/clientCheck";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   try {
@@ -51,7 +52,10 @@ const My = ({ id, files }: MyProps) => {
   const [Files, setFiles] = useState<File[]>(files);
   const onRemove = async (fileName: string) => {
     try {
-      await api.delete(`/file/${fileName}`, { withCredentials: true });
+      await clientCheck(
+        async () =>
+          await api.delete(`/file/${fileName}`, { withCredentials: true })
+      );
       toast({
         isClosable: true,
         position: "top-right",

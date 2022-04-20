@@ -10,6 +10,7 @@ import {
 import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { api } from "../../lib/api";
+import { clientCheck } from "../../lib/clientCheck";
 import { errorToast } from "../../lib/errorToast";
 
 export default function UploadForm() {
@@ -31,10 +32,13 @@ export default function UploadForm() {
     formData.append("file", FileRef.current.files[0]);
 
     try {
-      await api.post("/upload", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-        withCredentials: true,
-      });
+      await clientCheck(
+        async () =>
+          await api.post("/upload", formData, {
+            headers: { "Content-Type": "multipart/form-data" },
+            withCredentials: true,
+          })
+      );
       toast({
         isClosable: true,
         title: "업로드 성공",
