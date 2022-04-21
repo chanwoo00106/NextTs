@@ -1,6 +1,7 @@
 import type { GetServerSideProps, NextPage } from "next";
 import FileForm from "../components/FileForm";
 import Header from "../components/Header";
+import SEO from "../components/SEO";
 import { api } from "../lib/api";
 import checkUser from "../lib/checkUser";
 
@@ -32,6 +33,7 @@ interface HomeProps {
 const Home: NextPage<HomeProps> = ({ isLogined }) => {
   return (
     <>
+      <SEO title="gdrive" />
       <Header />
       <FileForm isLogined={isLogined} />
     </>

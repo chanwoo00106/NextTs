@@ -4,6 +4,7 @@ import { api } from "../../lib/api";
 import { File } from "../../types/UserFiles";
 import Header from "../../components/Header";
 import Error from "../../components/Error";
+import SEO from "../../components/SEO";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   try {
@@ -46,6 +47,10 @@ export default function FileView({ data, error }: FileProps) {
 
   return (
     <>
+      <SEO
+        title={`gdrive | ${data.name}`}
+        img={data.mimetype.includes("image") ? data.url : "/file.png"}
+      />
       <Header />
       <Flex
         justifyContent="center"

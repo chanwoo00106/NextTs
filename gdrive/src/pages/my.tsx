@@ -18,6 +18,7 @@ import { GetServerSideProps } from "next";
 import { errorToast } from "../lib/errorToast";
 import { useState } from "react";
 import { clientCheck } from "../lib/clientCheck";
+import SEO from "../components/SEO";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   try {
@@ -72,6 +73,7 @@ const My = ({ id, files }: MyProps) => {
   };
   return (
     <>
+      <SEO title={`gdrive | ${id}`} img="" />
       <Header />
       <Container mt="6rem" mb="4rem">
         <Heading mb={6}>{id}의 파일들</Heading>

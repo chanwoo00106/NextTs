@@ -7,6 +7,7 @@ import {
   useToast,
   Box,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { api } from "../../lib/api";
@@ -19,6 +20,7 @@ export default function UploadForm() {
   const FileRef = useRef<HTMLInputElement>(null);
   const [fileName, setFileName] = useState<string>();
   const toast = useToast();
+  const router = useRouter();
 
   const onSubmit = async (data: any) => {
     if (FileRef.current?.files?.length === 0 || !FileRef.current?.files) {
@@ -46,6 +48,9 @@ export default function UploadForm() {
         status: "success",
         duration: 2000,
       });
+      router.push(
+        `/file/${data.name ? data.name : FileRef.current.files[0].name}`
+      );
     } catch (e: any) {
       toast(errorToast("업로드 실패"));
     }
