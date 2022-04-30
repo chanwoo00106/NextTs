@@ -29,7 +29,7 @@ export default function MainPage() {
       display="flex"
       justifyContent="space-between"
       alignItems="center"
-      padding="0 3rem"
+      px="5"
       gap="2rem"
       background={background}
     >
