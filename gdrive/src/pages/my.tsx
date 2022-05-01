@@ -19,6 +19,7 @@ import { errorToast } from "../lib/errorToast";
 import { useState } from "react";
 import { clientCheck } from "../lib/clientCheck";
 import SEO from "../components/SEO";
+import { successToast } from "../lib/successToast";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   try {
@@ -59,13 +60,7 @@ const My = ({ id, files }: MyProps) => {
         async () =>
           await api.delete(`/file/${fileName}`, { withCredentials: true })
       );
-      toast({
-        isClosable: true,
-        position: "top-right",
-        status: "success",
-        title: "삭제 성공",
-        duration: 2000,
-      });
+      toast(successToast("삭제 성공"));
       setFiles(Files.filter((i) => i.name !== fileName));
     } catch (e) {
       toast(errorToast("삭제 실패"));
@@ -75,13 +70,7 @@ const My = ({ id, files }: MyProps) => {
   const logout = async () => {
     try {
       await api.post("/auth/logout");
-      toast({
-        isClosable: true,
-        position: "top-right",
-        status: "success",
-        title: "로그아웃 성공",
-        duration: 2000,
-      });
+      toast(successToast("로그아웃 성공"));
     } catch (e) {
       toast(errorToast("로그아웃 실패"));
     }

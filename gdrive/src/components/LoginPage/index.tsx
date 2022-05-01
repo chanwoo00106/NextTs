@@ -11,6 +11,7 @@ import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { api } from "../../lib/api";
 import { errorToast } from "../../lib/errorToast";
+import { successToast } from "../../lib/successToast";
 
 interface LoginPageProps {
   type: "SignIn" | "SignUp";
@@ -41,13 +42,7 @@ export default function LoginPage({ type }: LoginPageProps) {
         },
         { withCredentials: true }
       );
-      toast({
-        title: "성공!",
-        isClosable: true,
-        position: "top-right",
-        status: "success",
-        duration: 2000,
-      });
+      toast(successToast("성공!"));
       if (type === "SignUp") router.push("/auth/signin");
       else router.push("/");
     } catch (e: any) {
