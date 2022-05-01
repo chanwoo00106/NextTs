@@ -71,12 +71,31 @@ const My = ({ id, files }: MyProps) => {
       toast(errorToast("삭제 실패"));
     }
   };
+
+  const logout = async () => {
+    try {
+      await api.post("/auth/logout");
+      toast({
+        isClosable: true,
+        position: "top-right",
+        status: "success",
+        title: "로그아웃 성공",
+        duration: 2000,
+      });
+    } catch (e) {
+      toast(errorToast("로그아웃 실패"));
+    }
+  };
+
   return (
     <>
       <SEO title={`gdrive | ${id}`} img="" />
       <Header />
       <Container mt="6rem" mb="4rem">
-        <Heading mb={6}>{id}의 파일들</Heading>
+        <Heading mb={6} display="flex" justifyContent="space-between">
+          <p>{id}의 파일들</p>
+          <Text onClick={logout}>로그아웃</Text>
+        </Heading>
         <Flex
           alignItems="center"
           width="100%"
