@@ -13,6 +13,7 @@ import { AiOutlineUser } from "react-icons/ai";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import { HamburgerIcon } from "@chakra-ui/icons";
+import { ImFilesEmpty } from "react-icons/im";
 
 export default function MainPage() {
   const background = useColorModeValue("gray.100", "gray.800");
@@ -40,7 +41,7 @@ export default function MainPage() {
         display="flex"
         justifyContent="space-between"
         alignItems="center"
-        px="5"
+        px="2rem"
         gap="2rem"
         background={background}
       >
@@ -50,11 +51,26 @@ export default function MainPage() {
           </a>
         </Link>
 
-        <Flex gap="1rem" display={{ base: "none", md: "flex" }}>
+        <Flex
+          gap="2rem"
+          display={{ base: "none", md: "flex" }}
+          alignItems="center"
+        >
           <form onSubmit={handleSubmit(onSubmit)}>
             <Input {...register("search")} placeholder="파일 검색" />
           </form>
-          <Switch colorScheme="gray.200" size="lg" onChange={toggleColorMode} />
+          <Switch
+            display="flex"
+            alignItems="center"
+            colorScheme="gray.200"
+            size="lg"
+            onChange={toggleColorMode}
+          />
+          <Link href="/files">
+            <a>
+              <ImFilesEmpty size="1.5rem" />
+            </a>
+          </Link>
           <Link href="/my">
             <a>
               <AiOutlineUser size="2rem" />
@@ -78,7 +94,7 @@ export default function MainPage() {
       <Box
         background={background}
         position="fixed"
-        mt="4rem"
+        top="4rem"
         display={isOpen ? "block" : "none"}
         w="100%"
         zIndex="20"

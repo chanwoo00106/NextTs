@@ -91,9 +91,10 @@ export default function UploadForm() {
       <Input
         {...register("name")}
         placeholder="파일 이름 입력 (선택)"
-        width="25rem"
+        w="100%"
+        maxW="25rem"
       />
-      <Button width="10rem" type="submit">
+      <Button maxW="10rem" w="100%" type="submit">
         업로드
       </Button>
     </FormControl>

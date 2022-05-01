@@ -56,13 +56,20 @@ export default function FileView({ data, error }: FileProps) {
         justifyContent="center"
         alignItems="center"
         flexDir="column"
-        width="100%"
+        w="100%"
         height="100vh"
+        px="2rem"
       >
         {data.mimetype.includes("image") || data.mimetype.includes("video") ? (
           <>
             {data.mimetype.includes("image") && (
-              <Image src={data.url} alt={data.name} maxW={500} maxH={500} />
+              <Image
+                src={data.url}
+                alt={data.name}
+                maxW={500}
+                w="100%"
+                maxH={500}
+              />
             )}
 
             {data.mimetype.includes("video") && (

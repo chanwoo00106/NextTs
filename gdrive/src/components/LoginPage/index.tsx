@@ -51,12 +51,7 @@ export default function LoginPage({ type }: LoginPageProps) {
       if (type === "SignUp") router.push("/auth/signin");
       else router.push("/");
     } catch (e: any) {
-      console.log(e.response);
-      if (!e.response) {
-        toast(errorToast("로그인에 실패했습니다"));
-        return;
-      }
-      toast(errorToast(e.response.data.message));
+      toast(errorToast("로그인에 실패했습니다"));
     }
   };
 
