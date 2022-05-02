@@ -12,7 +12,7 @@ import { File } from "../../types/UserFiles";
 
 interface ViewFileProps {
   file: File;
-  onRemove: ((name: string) => void) | undefined;
+  onRemove?: (name: string) => void;
 }
 
 const ViewFile: NextPage<ViewFileProps> = ({ file, onRemove }) => {
@@ -23,7 +23,7 @@ const ViewFile: NextPage<ViewFileProps> = ({ file, onRemove }) => {
       {file.mimetype.includes("image") || file.mimetype.includes("video") ? (
         <>
           {file.mimetype.includes("image") && (
-            <Image src={file.url} alt={file.name} />
+            <Image maxW="30rem" src={file.url} alt={file.name} />
           )}
           {file.mimetype.includes("video") && (
             <video controls>

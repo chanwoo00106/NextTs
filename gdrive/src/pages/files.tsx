@@ -1,9 +1,10 @@
 import { GetServerSideProps, NextPage } from "next";
 import { api } from "../lib/api";
-import { FileType } from "../types/FileType";
 import Error from "../components/Error";
 import Header from "../components/Header";
-import { Box } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
+import { File } from "../types/UserFiles";
+import ViewFile from "../components/ViewFile";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   console.log(ctx.query);
@@ -13,7 +14,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     );
     return {
       props: {
-        data,
+        files: data,
       },
     };
   } catch (e) {
@@ -22,15 +23,26 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 };
 
 interface FilesProps {
-  data?: FileType[];
+  files?: File[];
 }
 
-const Files: NextPage<FilesProps> = ({ data }) => {
-  if (!data) return <Error />;
+const Files: NextPage<FilesProps> = ({ files }) => {
+  if (!files) return <Error />;
+
   return (
     <>
       <Header />
-      <Box mt="4rem"></Box>
+      <Flex
+        alignItems="center"
+        direction="column"
+        mt="6rem"
+        gap="2rem"
+        width="100%"
+      >
+        {files.map((file) => (
+          <ViewFile file={file} key={file.id} />
+        ))}
+      </Flex>
     </>
   );
 };
