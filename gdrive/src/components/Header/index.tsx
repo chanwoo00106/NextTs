@@ -84,6 +84,8 @@ export default function MainPage() {
       </Box>
       <Box
         position="absolute"
+        top={0}
+        left={0}
         w="100%"
         h="100vh"
         zIndex={2}

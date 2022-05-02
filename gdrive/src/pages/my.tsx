@@ -1,15 +1,4 @@
-import {
-  Box,
-  Button,
-  Container,
-  Flex,
-  Heading,
-  Image,
-  Link,
-  Text,
-  useColorModeValue,
-  useToast,
-} from "@chakra-ui/react";
+import { Container, Flex, Heading, Text, useToast } from "@chakra-ui/react";
 import { api } from "../lib/api";
 import checkUser from "../lib/checkUser";
 import Header from "../components/Header";
@@ -20,6 +9,7 @@ import { useState } from "react";
 import { clientCheck } from "../lib/clientCheck";
 import SEO from "../components/SEO";
 import { successToast } from "../lib/successToast";
+import ViewFile from "../components/ViewFile";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   try {
@@ -52,7 +42,6 @@ interface MyProps {
 
 const My = ({ id, files }: MyProps) => {
   const toast = useToast();
-  const backColor = useColorModeValue("white", "blackAlpha.400");
   const [Files, setFiles] = useState<File[]>(files);
   const onRemove = async (fileName: string) => {
     try {
@@ -93,32 +82,7 @@ const My = ({ id, files }: MyProps) => {
           justifyContent="center"
         >
           {Files?.map((file) => (
-            <Box key={file.id} background={backColor} p="2rem" rounded="1rem">
-              {file.mimetype.includes("image") ||
-              file.mimetype.includes("video") ? (
-                <>
-                  {file.mimetype.includes("image") && (
-                    <Image src={file.url} alt={file.name} />
-                  )}
-                  {file.mimetype.includes("video") && (
-                    <video controls>
-                      <source src={file.url} type={file.mimetype} />
-                    </video>
-                  )}
-                </>
-              ) : (
-                <Image src="/file.png" alt="file" />
-              )}
-
-              <Link href={file.url}>
-                <Text fontSize="1.2rem" textAlign="center" mt={3}>
-                  {file.name}
-                </Text>
-              </Link>
-              <Flex justifyContent="center" mt={5}>
-                <Button onClick={() => onRemove(file.name)}>파일 제거</Button>
-              </Flex>
-            </Box>
+            <ViewFile onRemove={onRemove} file={file} key={file.id} />
           ))}
         </Flex>
       </Container>
