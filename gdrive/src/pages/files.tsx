@@ -6,6 +6,7 @@ import { Flex, Heading } from "@chakra-ui/react";
 import { File } from "../types/UserFiles";
 import ViewFile from "../components/ViewFile";
 import SEO from "../components/SEO";
+import Loading from "../components/Loading";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   console.log(ctx.query);
@@ -45,11 +46,14 @@ const Files: NextPage<FilesProps> = ({ files }) => {
         pt="6rem"
         gap="2rem"
         width="100%"
+        px={5}
+        mb={5}
       >
         {files?.map((file) => (
           <ViewFile file={file} key={file.id} />
         ))}
         {!files[0] && <Heading>파일이 없음</Heading>}
+        <Loading />
       </Flex>
     </>
   );

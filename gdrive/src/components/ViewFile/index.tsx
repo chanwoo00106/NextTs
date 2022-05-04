@@ -19,11 +19,11 @@ const ViewFile: NextPage<ViewFileProps> = ({ file, onRemove }) => {
   const backColor = useColorModeValue("white", "blackAlpha.400");
 
   return (
-    <Box key={file.id} background={backColor} p="2rem" rounded="1rem">
+    <Box background={backColor} p="2rem" rounded="1rem">
       {file.mimetype.includes("image") || file.mimetype.includes("video") ? (
         <>
           {file.mimetype.includes("image") && (
-            <Image maxW="30rem" src={file.url} alt={file.name} />
+            <Image maxW="30rem" w="100%" src={file.url} alt={file.name} />
           )}
           {file.mimetype.includes("video") && (
             <video controls>
