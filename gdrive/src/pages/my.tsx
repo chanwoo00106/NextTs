@@ -10,6 +10,7 @@ import { clientCheck } from "../lib/clientCheck";
 import SEO from "../components/SEO";
 import { successToast } from "../lib/successToast";
 import ViewFile from "../components/ViewFile";
+import { useRouter } from "next/router";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   try {
@@ -42,6 +43,7 @@ interface MyProps {
 
 const My = ({ id, files }: MyProps) => {
   const toast = useToast();
+  const router = useRouter();
   const [Files, setFiles] = useState<File[]>(files);
   const onRemove = async (fileName: string) => {
     try {
@@ -58,8 +60,9 @@ const My = ({ id, files }: MyProps) => {
 
   const logout = async () => {
     try {
-      await api.post("/auth/logout");
+      await api.post("/auth/logout", {}, { withCredentials: true });
       toast(successToast("로그아웃 성공"));
+      router.push("/");
     } catch (e) {
       toast(errorToast("로그아웃 실패"));
     }
@@ -70,9 +73,21 @@ const My = ({ id, files }: MyProps) => {
       <SEO title={`gdrive | ${id}`} img="" />
       <Header />
       <Container mt="6rem" mb="4rem">
-        <Heading mb={6} display="flex" justifyContent="space-between">
+        <Heading
+          mb={6}
+          display="flex"
+          justifyContent="space-between"
+          alignItems="end"
+        >
           <p>{id}의 파일들</p>
-          <Text onClick={logout}>로그아웃</Text>
+          <Text
+            cursor="pointer"
+            _hover={{ textDecoration: "underline" }}
+            fontSize="1rem"
+            onClick={logout}
+          >
+            로그아웃
+          </Text>
         </Heading>
         <Flex
           alignItems="center"

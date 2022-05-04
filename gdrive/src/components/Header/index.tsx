@@ -107,6 +107,9 @@ export default function MainPage() {
           </Link>
         </Box>
         <Box py="1rem" px="2rem">
+          <Link href="/files">Files</Link>
+        </Box>
+        <Box py="1rem" px="2rem">
           <Switch colorScheme="gray.200" size="lg" onChange={toggleColorMode} />
         </Box>
         <Box py="1rem" px="2rem">
