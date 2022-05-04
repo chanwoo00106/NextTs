@@ -1,10 +1,12 @@
 import { Box, useColorModeValue } from "@chakra-ui/react";
+import { forwardRef } from "react";
 
-const Loading = () => {
+const Loading = forwardRef<HTMLDivElement, {}>(({}, ref) => {
   const backColor = useColorModeValue("white", "blackAlpha.400");
 
   return (
     <Box
+      ref={ref}
       background={backColor}
       p="2rem"
       rounded="1rem"
@@ -26,6 +28,6 @@ const Loading = () => {
       <Box w="70%" h="1.2rem" background="#eee" mt={4} rounded={100} />
     </Box>
   );
-};
-
+});
+Loading.displayName = "Loading";
 export default Loading;
