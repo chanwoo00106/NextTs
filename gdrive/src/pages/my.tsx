@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Container, Flex, Heading, Text, useToast } from "@chakra-ui/react";
 import { api } from "../lib/api";
 import checkUser from "../lib/checkUser";
@@ -5,18 +6,19 @@ import Header from "../components/Header";
 import { File, UserFiles } from "../types/UserFiles";
 import { GetServerSideProps } from "next";
 import { errorToast } from "../lib/errorToast";
-import { useState } from "react";
 import { clientCheck } from "../lib/clientCheck";
 import SEO from "../components/SEO";
 import { successToast } from "../lib/successToast";
 import ViewFile from "../components/ViewFile";
 import { useRouter } from "next/router";
+import { useInView } from "react-intersection-observer";
+import Loading from "../components/Loading";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   try {
     const [_, accessToken] = await checkUser(ctx);
 
-    const { data }: { data: UserFiles } = await api.get("/my", {
+    const { data }: { data: UserFiles } = await api.get("/my?pages=1", {
       headers: { cookie: `accessToken=${accessToken};` },
       withCredentials: true,
     });
@@ -42,9 +44,13 @@ interface MyProps {
 }
 
 const My = ({ id, files }: MyProps) => {
+  const [page, setPage] = useState<number>(1);
+  const [result, setResult] = useState<boolean>(true);
+  const [ref, inView] = useInView();
   const toast = useToast();
   const router = useRouter();
   const [Files, setFiles] = useState<File[]>(files);
+
   const onRemove = async (fileName: string) => {
     try {
       await clientCheck(
@@ -67,6 +73,17 @@ const My = ({ id, files }: MyProps) => {
       toast(errorToast("로그아웃 실패"));
     }
   };
+
+  useEffect(() => {
+    if (inView) {
+      (async () => {
+        const { data } = await api.get(`/files?page=${page + 1}`);
+        if (!data[0]) setResult(false);
+        setFiles([...Files, ...data]);
+        setPage(page + 1);
+      })();
+    }
+  }, [inView]);
 
   return (
     <>
@@ -99,6 +116,8 @@ const My = ({ id, files }: MyProps) => {
           {Files?.map((file) => (
             <ViewFile onRemove={onRemove} file={file} key={file.id} />
           ))}
+          {!files[0] && <Heading>파일이 없음</Heading>}
+          {result && <Loading ref={ref} />}
         </Flex>
       </Container>
     </>
