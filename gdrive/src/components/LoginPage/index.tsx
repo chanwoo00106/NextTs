@@ -51,7 +51,7 @@ export default function LoginPage({ type }: LoginPageProps) {
   };
 
   return (
-    <Flex height="100vh" justifyContent="center" alignItems="center">
+    <Flex className="maxH" justifyContent="center" alignItems="center" p={10}>
       <Flex
         as="form"
         direction="column"

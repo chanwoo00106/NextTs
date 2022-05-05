@@ -14,7 +14,7 @@ export default function FileForm({ isLogined }: FileFromProps) {
   };
 
   return (
-    <Flex height="100vh" justifyContent="center" alignItems="center">
+    <Flex className="maxH" justifyContent="center" alignItems="center">
       <Flex
         direction="column"
         p={12}
