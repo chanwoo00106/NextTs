@@ -10,22 +10,14 @@ import {
 import Link from "next/link";
 import React from "react";
 import { AiOutlineUser } from "react-icons/ai";
-import { useForm } from "react-hook-form";
-import { useRouter } from "next/router";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { ImFilesEmpty } from "react-icons/im";
+import SearchForm from "./SearchForm";
 
 export default function MainPage() {
   const background = useColorModeValue("gray.100", "gray.800");
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { register, handleSubmit } = useForm();
-  const router = useRouter();
   const { toggleColorMode } = useColorMode();
-
-  const onSubmit = ({ search }: any) => {
-    router.push(`/file/${search}`);
-    onClose();
-  };
 
   const handleToggle = () => (isOpen ? onClose() : onOpen());
 
@@ -56,9 +48,7 @@ export default function MainPage() {
           display={{ base: "none", md: "flex" }}
           alignItems="center"
         >
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <Input {...register("search")} placeholder="파일 검색" />
-          </form>
+          <SearchForm />
           <Switch
             display="flex"
             alignItems="center"
@@ -113,9 +103,7 @@ export default function MainPage() {
           <Switch colorScheme="gray.200" size="lg" onChange={toggleColorMode} />
         </Box>
         <Box py="1rem" px="2rem">
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <Input {...register("search")} placeholder="파일 검색" />
-          </form>
+          <SearchForm func={onClose} />
         </Box>
       </Box>
     </>
