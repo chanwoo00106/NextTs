@@ -1,5 +1,5 @@
 import api from '@lib/api'
-import { Main } from '@components'
+import { Header, PokeList as PokeList } from '@components'
 import type { Pokemon } from '@types'
 import type { GetStaticProps, NextPage } from 'next'
 
@@ -18,7 +18,12 @@ interface Props {
 }
 
 const Home: NextPage<Props> = ({ data, ok }) => {
-  return <Main data={data} />
+  return (
+    <>
+      <Header />
+      <PokeList data={data} />
+    </>
+  )
 }
 
 export default Home

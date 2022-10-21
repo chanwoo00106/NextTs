@@ -1,12 +1,15 @@
 import styled from '@emotion/styled'
 
-export const Wrapper = styled.div``
+export const Wrapper = styled.div`
+  padding: 0 5rem;
+`
 
 export const CardList = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 2rem;
   justify-content: center;
+  margin-bottom: 2rem;
 `
 
 // Card

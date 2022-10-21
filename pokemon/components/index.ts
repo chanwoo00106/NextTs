@@ -1,1 +1,2 @@
-export { default as Main } from './Main'
+export { default as PokeList } from './PokeList'
+export { default as Header } from './Header'

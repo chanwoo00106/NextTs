@@ -10,7 +10,7 @@ interface Props {
 }
 
 const Card: NextPage<Props> = ({ name, url }) => {
-  const [idx, setIdx] = useState<string>(url.split('/')?.at(-2) as string)
+  const [idx, _] = useState<string>(url.split('/')?.at(-2) as string)
   return (
     <S.CardWrapper>
       <Image src={PokemonImg(idx)} height={100} width={100} alt={name} />

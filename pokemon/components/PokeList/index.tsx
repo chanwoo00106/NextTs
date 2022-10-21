@@ -7,7 +7,7 @@ interface Props {
   data: Pokemon
 }
 
-const Main: NextPage<Props> = ({ data }) => {
+const PokeList: NextPage<Props> = ({ data }) => {
   return (
     <S.Wrapper>
       <S.CardList>
@@ -19,4 +19,4 @@ const Main: NextPage<Props> = ({ data }) => {
   )
 }
 
-export default Main
+export default PokeList
