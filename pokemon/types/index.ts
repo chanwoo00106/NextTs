@@ -1,1 +1,1 @@
-export type { default as Pokemon } from './Pokemon'
+export type { default as Pokemon, Result } from './Pokemon'
