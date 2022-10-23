@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { HYDRATE } from 'next-redux-wrapper'
 import { RootState } from '.'
 
-interface CounterState {
+export interface CounterState {
   count: number
 }
 
@@ -18,6 +19,11 @@ export const counterSlice = createSlice({
     },
     decreament: state => {
       state.count -= 1
+    }
+  },
+  extraReducers: {
+    [HYDRATE]: (state, action) => {
+      state.count = action.payload.profile.count
     }
   }
 })

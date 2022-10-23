@@ -1,11 +1,36 @@
-import { configureStore } from '@reduxjs/toolkit'
-import counterReducer from './counter'
+import { AnyAction, combineReducers, configureStore } from '@reduxjs/toolkit'
+import { createWrapper, HYDRATE } from 'next-redux-wrapper'
+import counterReducer, { CounterState } from './counter'
 
-export const store = configureStore({
-  reducer: {
-    counter: counterReducer
+export interface ReducerStates {
+  counter: CounterState
+}
+
+const rootReducer = (state: ReducerStates, action: AnyAction) => {
+  switch (action.type) {
+    case HYDRATE:
+      return { ...state, ...action.payload }
+
+    default:
+      const combineReducer = combineReducers({
+        counter: counterReducer
+      })
+
+      return combineReducer(state, action)
   }
-})
+}
 
-export type RootState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
+const makeStore = () => {
+  const store = configureStore({
+    reducer: rootReducer as any,
+    devTools: true
+  })
+  return store
+}
+
+export type AppStore = ReturnType<typeof makeStore> // store 타입
+export type RootState = ReturnType<typeof rootReducer>
+
+const wrapper = createWrapper(makeStore, { debug: true })
+
+export default wrapper
