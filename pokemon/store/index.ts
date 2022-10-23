@@ -3,34 +3,34 @@ import { AnyAction, combineReducers, configureStore } from '@reduxjs/toolkit'
 import pokemon from './pokemon'
 import { Result } from '@types'
 
-interface ReducerState {
+export interface ReducerState {
   pokemon: Result[]
 }
 
 const rootReducer = (state: ReducerState, action: AnyAction) => {
+  console.log(state, action)
   switch (action.type) {
     case HYDRATE:
-      return action.payload
+      console.log('hi')
+      return { ...state, ...action.payload }
 
-    default: {
+    default:
       const combineReducer = combineReducers({ pokemon })
       return combineReducer(state, action)
-    }
   }
 }
 
 const makeStore = () => {
   const store = configureStore({
     reducer: rootReducer as any,
-    devTools: process.env.NODE_ENV === 'development'
+    devTools: true
   })
   return store
 }
 
 export type AppStore = ReturnType<typeof makeStore>
 export type RootStore = ReturnType<typeof rootReducer>
-export type AppDispatch = AppStore['dispatch']
 
-const wrapper = createWrapper(makeStore)
+const wrapper = createWrapper(makeStore, { debug: true })
 
 export default wrapper

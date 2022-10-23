@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Result } from '@types'
-import produce from 'immer'
+import { HYDRATE } from 'next-redux-wrapper'
 
 const initialState: Result[] = []
 
@@ -9,10 +9,13 @@ export const pokemon = createSlice({
   initialState,
   reducers: {
     addPokemon: (state, action: PayloadAction<Result[]>) => {
-      state = produce(state, draft => {
-        draft.push(...action.payload)
-      })
-      console.log(state)
+      state.push(...action.payload)
+    }
+  },
+  extraReducers: {
+    [HYDRATE]: (state, action) => {
+      console.log(action)
+      state.push(action.payload.profile.pokemon)
     }
   }
 })
