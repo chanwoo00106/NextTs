@@ -1,11 +1,13 @@
+import { Result } from '@types'
 import { NextPage } from 'next'
-import { useSelector } from 'react-redux'
-import { ReducerState } from '@store'
 import Card from './Card'
 import * as S from './style'
 
-const PokeList: NextPage = () => {
-  const data = useSelector((state: ReducerState) => state.pokemon)
+interface Props {
+  data: Result[]
+}
+
+const PokeList: NextPage<Props> = ({ data }) => {
   return (
     <S.Wrapper>
       <S.CardList>
