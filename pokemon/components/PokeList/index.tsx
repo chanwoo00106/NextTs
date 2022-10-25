@@ -4,7 +4,7 @@ import Card from './Card'
 import * as S from './style'
 
 interface Props {
-  data: Result[]
+  data?: Result[]
 }
 
 const PokeList: NextPage<Props> = ({ data }) => {
