@@ -4,12 +4,21 @@ import Card from './Card'
 import * as S from './style'
 import { RootStates } from '@store'
 import { useEffect } from 'react'
+import { Pokemon } from '@types'
+import api from '@lib/api'
+import { useDispatch } from 'react-redux'
+import { addPokemon, setIsLoading } from '@store/pokemon'
 
 const PokeList: NextPage = () => {
-  const { pokemon, scrollY } = useSelector((state: RootStates) => ({
-    pokemon: state.pokemon.pokemon,
-    scrollY: state.window.scrollY
-  }))
+  const dispatch = useDispatch()
+  const { pokemon, offset, isLoading, scrollY } = useSelector(
+    (state: RootStates) => ({
+      pokemon: state.pokemon.pokemon,
+      offset: state.pokemon.offset,
+      isLoading: state.pokemon.isLoading,
+      scrollY: state.window.scrollY
+    })
+  )
 
   useEffect(() => {
     const screenH = window.innerHeight // 윈도우 높이
@@ -17,17 +26,24 @@ const PokeList: NextPage = () => {
 
     if (!totalH) return
 
-    console.log(screenH, totalH, totalH - screenH, scrollY)
+    if (totalH - screenH <= scrollY && offset && !isLoading) {
+      ;(async () => {
+        dispatch(setIsLoading())
+        const { data } = await api.get<Pokemon>(
+          `/api/v2/pokemon?limit=50&offset=${50 * offset}`
+        )
 
-    if (totalH - screenH <= scrollY) {
+        dispatch(addPokemon(data.results))
+        dispatch(setIsLoading())
+      })()
     }
   }, [scrollY])
 
   return (
     <S.Wrapper>
       <S.CardList>
-        {pokemon?.map(i => (
-          <Card key={i.name} name={i.name} url={i.url} />
+        {pokemon?.map((i, idx) => (
+          <Card key={idx} name={i.name} url={i.url} />
         ))}
       </S.CardList>
     </S.Wrapper>
