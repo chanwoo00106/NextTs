@@ -2,9 +2,11 @@ import { configureStore } from '@reduxjs/toolkit'
 import { createWrapper, HYDRATE } from 'next-redux-wrapper'
 import { AnyAction, combineReducers } from 'redux'
 import pokemonReducer, { PokemonState } from './pokemon'
+import windowReducer, { WindowState } from './window'
 
 export interface RootStates {
   pokemon: PokemonState
+  window: WindowState
 }
 
 const rootReducer = (state: RootStates, action: AnyAction) => {
@@ -14,7 +16,8 @@ const rootReducer = (state: RootStates, action: AnyAction) => {
 
     default:
       const combineReducer = combineReducers({
-        pokemon: pokemonReducer
+        pokemon: pokemonReducer,
+        window: windowReducer
       })
 
       return combineReducer(state, action)

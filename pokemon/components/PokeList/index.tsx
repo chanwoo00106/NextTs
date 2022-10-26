@@ -6,6 +6,7 @@ import { RootStates } from '@store'
 
 const PokeList: NextPage = () => {
   const pokemon = useSelector((state: RootStates) => state.pokemon.pokemon)
+
   return (
     <S.Wrapper>
       <S.CardList>
