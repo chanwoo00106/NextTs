@@ -4,6 +4,7 @@ import type { Pokemon } from '@types'
 import type { NextPage } from 'next'
 import wrapper from '@store'
 import { addPokemon } from '@store/pokemon'
+import useScrollObserver from '@lib/useScrollObserver'
 
 interface Props {
   ok: boolean
@@ -23,6 +24,7 @@ export const getStaticProps = wrapper.getStaticProps<Props>(
 )
 
 const Home: NextPage<Props> = ({ ok }) => {
+  useScrollObserver()
   return (
     <>
       <Header />
