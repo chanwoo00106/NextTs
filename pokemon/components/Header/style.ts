@@ -18,6 +18,7 @@ export const Wrapper = styled.div`
   justify-content: space-between;
   padding: 0 1.5rem;
   box-sizing: border-box;
+  transition: 0.5s;
 `
 
 export const Search = styled.input`

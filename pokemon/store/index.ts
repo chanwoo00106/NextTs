@@ -32,9 +32,6 @@ const makeStore = () => {
   return store
 }
 
-export type AppStore = ReturnType<typeof makeStore> // store 타입
-export type RootState = ReturnType<typeof rootReducer>
-
 const wrapper = createWrapper(makeStore, { debug: true })
 
 export default wrapper

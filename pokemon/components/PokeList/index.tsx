@@ -37,7 +37,7 @@ const PokeList: NextPage = () => {
         dispatch(setIsLoading())
       })()
     }
-  }, [scrollY])
+  }, [scrollY, offset, dispatch])
 
   return (
     <S.Wrapper>
