@@ -19,7 +19,7 @@ export const CardWrapper = styled.div`
   box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2);
   display: inline-flex;
   align-items: center;
-  padding: 0 1rem;
+  padding: 0.2rem 1rem;
   gap: 1rem;
   cursor: pointer;
   transition: 0.2s;
