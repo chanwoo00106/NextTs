@@ -40,4 +40,4 @@ const Card: NextPage<Props> = ({ name, url }) => {
   )
 }
 
-export default React.memo(Card)
+export default Card
