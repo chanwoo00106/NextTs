@@ -4,7 +4,7 @@ import PokemonModal from '@portal/PokemonModal'
 import { PokemonDetail } from '@types'
 import { NextPage } from 'next'
 import Image from 'next/image'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import * as S from './style'
 
 interface Props {
@@ -40,4 +40,4 @@ const Card: NextPage<Props> = ({ name, url }) => {
   )
 }
 
-export default Card
+export default React.memo(Card)
