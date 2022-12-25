@@ -30,12 +30,12 @@
 
 스크롤을 내리면 해더가 숨고 올리면 나타나는 애니메이션을 개발했다<br>
 
-![header-animation](/public/header-animetion.gif)
+![header-animation](public/header-animetion.gif)
 
 하지만 스크롤을 내릴 때마다 포캣몬 컴포넌트에서 리렌더링이 발생하는 문제가 생기고 결국 해더 애니메이션이 버벅이게 되는 문제가 발생한다
 
-![re-rendering](/public/re-rendering.gif)
-![buffering-header](/public/buffering-header.gif)
+![re-rendering](public/re-rendering.gif)
+![buffering-header](public/buffering-header.gif)
 
 스크롤을 내릴 때 마다 `Card`컴포넌트가 자꾸 리렌더링을 했던 이유는 무한 스크롤 기능을 개발하면서 `window.scrollY`값을 읽다 보니 스크롤 할때 마다 리렌더링이 발생했고 이게 자식 컴포넌트까지 영향을 미쳤던 것이었다
 
