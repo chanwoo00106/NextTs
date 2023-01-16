@@ -1,7 +1,7 @@
 import { Box, IconButton } from "@chakra-ui/react";
 import { TaskModel } from "../utils/models";
 import { DeleteIcon } from "@chakra-ui/icons";
-import { ChangeEvent } from "react";
+import React, { ChangeEvent } from "react";
 import { AutoResizeTextarea } from "./AutoResizeTextArea";
 import useTaskDragAndDrop from "../hooks/useTaskDragAndDrop";
 
@@ -75,4 +75,4 @@ const Task = ({ index, task, onDelete, onUpdate }: Props) => {
   );
 };
 
-export default Task;
+export default React.memo(Task);

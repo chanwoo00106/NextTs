@@ -4,6 +4,7 @@ import useTaskCollection from "./useTaskCollection";
 import { v4 as uuidv4 } from "uuid";
 import { ColumnType } from "../utils/enums";
 import { pickChakraRandomColor } from "../utils/helpers";
+import produce from "immer";
 
 const MAX_TASK_PER_COLUMN = 100;
 
@@ -15,24 +16,26 @@ const useColumnTask = (column: ColumnType) => {
   }, [tasks]);
 
   const addEmptyTask = useCallback(() => {
-    setTasks((allTasks) => {
-      const columnTasks = allTasks[column];
+    setTasks(
+      produce(tasks, (draft) => {
+        const columnTasks = draft[column];
 
-      if (columnTasks.length > MAX_TASK_PER_COLUMN) {
-        console.log("Too many task");
-        return allTasks;
-      }
+        if (columnTasks.length > MAX_TASK_PER_COLUMN) {
+          console.log("Too many task");
+          return draft;
+        }
 
-      const newColumnTask: TaskModel = {
-        id: uuidv4(),
-        title: `New ${column} task`,
-        color: pickChakraRandomColor(".300"),
-        column,
-      };
+        const newColumnTask: TaskModel = {
+          id: uuidv4(),
+          title: `New ${column} task`,
+          color: pickChakraRandomColor(".300"),
+          column,
+        };
 
-      return { ...allTasks, [column]: [newColumnTask, ...columnTasks] };
-    });
-  }, [column, setTasks]);
+        draft[column].push(newColumnTask);
+      })
+    );
+  }, [column, setTasks, tasks]);
 
   const updateTask = useCallback(
     (id: TaskModel["id"], updatedTask: Omit<Partial<TaskModel>, "id">) => {
@@ -69,26 +72,22 @@ const useColumnTask = (column: ColumnType) => {
 
   const dropTaskFrom = useCallback(
     (from: ColumnType, id: TaskModel["id"]) => {
-      setTasks((allTasks) => {
-        const fromColumnTasks = allTasks[from];
-        const toColumnTasks = allTasks[column];
-        const movingTask = fromColumnTasks.find((task) => task.id === id);
+      setTasks(
+        produce(tasks, (draft) => {
+          const fromColumnTasks = draft[from];
+          const movingTask = fromColumnTasks.find((task) => task.id === id);
 
-        console.log(id, fromColumnTasks);
-        console.log(movingTask);
+          console.log(fromColumnTasks[0]);
+          console.log(fromColumnTasks[1]);
 
-        if (movingTask === undefined) return allTasks;
+          if (movingTask === undefined) return;
 
-        console.log(`Moving task ${movingTask.id} from ${from} to ${column}`);
-
-        return {
-          ...allTasks,
-          [from]: fromColumnTasks.filter((task) => task.id !== id),
-          [column]: [{ ...movingTask, column }, ...toColumnTasks],
-        };
-      });
+          draft[from] = draft[from].filter((task) => task.id !== id);
+          draft[column].push({ ...movingTask, column });
+        })
+      );
     },
-    [column, setTasks]
+    [column, setTasks, tasks]
   );
 
   return {
