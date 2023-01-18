@@ -4,11 +4,7 @@ export interface TaskType {
   id: number;
   title: string;
   category: "Todo" | "Done";
-}
-
-interface MoveType {
-  id: number;
-  moveCategory: "Todo" | "Done";
+  sort: number;
 }
 
 const initialState: TaskType[] = [];
@@ -20,16 +16,12 @@ const tasks = createSlice({
     add: (state, action: PayloadAction<TaskType>) => {
       state.push(action.payload);
     },
-    move: (state, action: PayloadAction<MoveType>) => {
-      return state.map((i) => {
-        if (i.id === action.payload.id)
-          return { ...i, category: action.payload.moveCategory };
-        return i;
-      });
+    remove: (state, action: PayloadAction<{ id: number }>) => {
+      state = state.filter((i) => i.id !== action.payload.id);
     },
   },
 });
 
-export const { add, move } = tasks.actions;
+export const { add, remove } = tasks.actions;
 
 export default tasks;
