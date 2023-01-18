@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-const initialState: number[] = [];
+const initialState: number[] = [6, 5, 7, 4];
 
 const doneSort = createSlice({
   name: "doneSort",
