@@ -1,19 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
-import doneSort from "./doneSort";
-import tasks, { TaskType } from "./tasks";
-import todoSort from "./todoSort";
+import tasks, { InitialStateType } from "./tasks";
 
 export interface RootState {
-  tasks: TaskType[];
-  doneSort: number[];
-  todoSort: number[];
+  tasks: InitialStateType;
 }
 
 const store = configureStore({
   reducer: {
     tasks: tasks.reducer,
-    doneSort: doneSort.reducer,
-    todoSort: todoSort.reducer,
   },
 });
 

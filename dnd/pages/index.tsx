@@ -7,8 +7,8 @@ export default function Home() {
     <>
       <Header />
       <Container display="flex" gap={5} maxW="container.lg" px={4} py={10}>
-        <Column type="todoSort" />
-        <Column type="doneSort" />
+        <Column type="Todo" />
+        <Column type="Done" />
       </Container>
     </>
   );

@@ -4,24 +4,23 @@ import { useSelector } from "react-redux";
 import Task from "./Task";
 
 interface Props {
-  type: "todoSort" | "doneSort";
+  type: "Todo" | "Done";
 }
-
 const Column = ({ type }: Props) => {
   const { tasks, list } = useSelector((state: RootState) => ({
-    tasks: state.tasks,
-    list: state[type],
+    tasks: state.tasks.tasks,
+    list: state.tasks[type],
   }));
 
   return (
     <>
       <Heading>{type}</Heading>
       <Box maxW="20rem">
-        {list.map((i) => {
+        {list.map((i, index) => {
           const task = tasks.find((j) => j.id === i);
           if (!task) return;
 
-          return <Task key={i} task={task} />;
+          return <Task key={i} task={task} index={index} />;
         })}
       </Box>
     </>
