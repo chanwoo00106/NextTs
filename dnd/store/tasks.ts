@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, current, PayloadAction } from "@reduxjs/toolkit";
 
 export interface TaskType {
   id: number;
@@ -45,13 +45,20 @@ const tasks = createSlice({
         targetId: number;
       }>
     ) => {
-      const reverseCategory =
-        payload.targetCategory === "Todo" ? "Done" : "Todo";
+      const category = payload.targetCategory;
 
       const index = state.tasks.findIndex((i) => i.id === payload.id);
+      const currentCategory = state.tasks[index].category;
+
+      if (currentCategory === category) {
+        state[category] = state[category].filter((i) => i !== payload.id);
+        state[category].splice(payload.targetId, 0, payload.id);
+        return;
+      }
+
       state.tasks[index].category = payload.targetCategory;
 
-      state[reverseCategory] = state[reverseCategory].filter(
+      state[currentCategory] = state[currentCategory].filter(
         (i) => payload.id !== i
       );
       state[payload.targetCategory].splice(payload.targetId, 0, payload.id);
