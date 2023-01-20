@@ -1,4 +1,4 @@
-import { createSlice, current, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface TaskType {
   id: number;
@@ -70,8 +70,8 @@ const moveSameCategory = (
   state: InitialStateType,
   { id, targetCategory: category, targetId }: MovePayloadType
 ) => {
-  state[category] = state[category].filter((i) => i !== id);
-  state[category].splice(targetId, 0, id);
+  removeId(state, category, id);
+  addId(state, category, id, targetId);
 };
 
 const moveDifferCategory = (
@@ -82,7 +82,24 @@ const moveDifferCategory = (
   const currentCategory = state.tasks[index].category;
   state.tasks[index].category = category;
 
-  state[currentCategory] = state[currentCategory].filter((i) => id !== i);
+  removeId(state, currentCategory, id);
+  addId(state, category, id, targetId);
+};
+
+const removeId = (
+  state: InitialStateType,
+  category: "Todo" | "Done",
+  id: number
+) => {
+  state[category] = state[category].filter((i) => id !== i);
+};
+
+const addId = (
+  state: InitialStateType,
+  category: "Todo" | "Done",
+  id: number,
+  targetId: number
+) => {
   state[category].splice(targetId, 0, id);
 };
 
