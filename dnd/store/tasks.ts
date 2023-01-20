@@ -12,6 +12,12 @@ export interface InitialStateType {
   Done: number[];
 }
 
+interface MovePayloadType {
+  id: number;
+  targetCategory: "Todo" | "Done";
+  targetId: number;
+}
+
 const initialState: InitialStateType = {
   tasks: [
     { id: 0, title: "hello world", category: "Todo" },
@@ -35,34 +41,20 @@ const tasks = createSlice({
       state.tasks.push(action.payload);
       state.Todo.unshift(action.payload.id);
     },
-    move: (
-      state,
-      {
-        payload,
-      }: PayloadAction<{
-        id: number;
-        targetCategory: "Todo" | "Done";
-        targetId: number;
-      }>
-    ) => {
+
+    move: (state, { payload }: PayloadAction<MovePayloadType>) => {
       const category = payload.targetCategory;
 
       const index = state.tasks.findIndex((i) => i.id === payload.id);
       const currentCategory = state.tasks[index].category;
 
       if (currentCategory === category) {
-        state[category] = state[category].filter((i) => i !== payload.id);
-        state[category].splice(payload.targetId, 0, payload.id);
+        moveSameCategory(state, payload);
         return;
       }
-
-      state.tasks[index].category = payload.targetCategory;
-
-      state[currentCategory] = state[currentCategory].filter(
-        (i) => payload.id !== i
-      );
-      state[payload.targetCategory].splice(payload.targetId, 0, payload.id);
+      moveDifferCategory(state, index, payload);
     },
+
     remove: (state, { payload: { id } }: PayloadAction<{ id: number }>) => {
       const index = state.tasks.findIndex((i) => i.id === id);
       const category = state.tasks[index].category;
@@ -73,6 +65,26 @@ const tasks = createSlice({
     },
   },
 });
+
+const moveSameCategory = (
+  state: InitialStateType,
+  { id, targetCategory: category, targetId }: MovePayloadType
+) => {
+  state[category] = state[category].filter((i) => i !== id);
+  state[category].splice(targetId, 0, id);
+};
+
+const moveDifferCategory = (
+  state: InitialStateType,
+  index: number,
+  { id, targetCategory: category, targetId }: MovePayloadType
+) => {
+  const currentCategory = state.tasks[index].category;
+  state.tasks[index].category = category;
+
+  state[currentCategory] = state[currentCategory].filter((i) => id !== i);
+  state[category].splice(targetId, 0, id);
+};
 
 export const { add, remove, move } = tasks.actions;
 
