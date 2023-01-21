@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import TasksActions from "./util/TasksActions";
 
 export interface TaskType {
   id: number;
@@ -12,7 +13,7 @@ export interface InitialStateType {
   Done: number[];
 }
 
-interface MovePayloadType {
+export interface MovePayloadType {
   id: number;
   targetCategory: "Todo" | "Done";
   targetId: number;
@@ -38,70 +39,21 @@ const tasks = createSlice({
   initialState,
   reducers: {
     add: (state, action: PayloadAction<TaskType>) => {
-      state.tasks.push(action.payload);
-      state.Todo.unshift(action.payload.id);
+      const tasksActions = new TasksActions(state);
+      tasksActions.add(action.payload);
     },
 
     move: (state, { payload }: PayloadAction<MovePayloadType>) => {
-      const category = payload.targetCategory;
-
-      const index = state.tasks.findIndex((i) => i.id === payload.id);
-      const currentCategory = state.tasks[index].category;
-
-      if (currentCategory === category) {
-        moveSameCategory(state, payload);
-        return;
-      }
-      moveDifferCategory(state, index, payload);
+      const tasksActions = new TasksActions(state);
+      tasksActions.move(payload);
     },
 
     remove: (state, { payload: { id } }: PayloadAction<{ id: number }>) => {
-      const index = state.tasks.findIndex((i) => i.id === id);
-      const category = state.tasks[index].category;
-
-      state[category] = state[category].filter((i) => i !== id);
-
-      state.tasks = state.tasks.filter((i) => i.id !== id);
+      const tasksActions = new TasksActions(state);
+      tasksActions.remove(id);
     },
   },
 });
-
-const moveSameCategory = (
-  state: InitialStateType,
-  { id, targetCategory: category, targetId }: MovePayloadType
-) => {
-  removeId(state, category, id);
-  addId(state, category, id, targetId);
-};
-
-const moveDifferCategory = (
-  state: InitialStateType,
-  index: number,
-  { id, targetCategory: category, targetId }: MovePayloadType
-) => {
-  const currentCategory = state.tasks[index].category;
-  state.tasks[index].category = category;
-
-  removeId(state, currentCategory, id);
-  addId(state, category, id, targetId);
-};
-
-const removeId = (
-  state: InitialStateType,
-  category: "Todo" | "Done",
-  id: number
-) => {
-  state[category] = state[category].filter((i) => id !== i);
-};
-
-const addId = (
-  state: InitialStateType,
-  category: "Todo" | "Done",
-  id: number,
-  targetId: number
-) => {
-  state[category].splice(targetId, 0, id);
-};
 
 export const { add, remove, move } = tasks.actions;
 
