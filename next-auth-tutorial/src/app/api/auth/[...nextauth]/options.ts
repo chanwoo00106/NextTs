@@ -1,6 +1,7 @@
 import type { NextAuthOptions } from 'next-auth'
 import GithubProvider from 'next-auth/providers/github'
 import CredentialsProvider from 'next-auth/providers/credentials'
+import prisma from '@/lib/prisma'
 
 export const config: NextAuthOptions = {
   providers: [
@@ -11,10 +12,10 @@ export const config: NextAuthOptions = {
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
-        username: {
-          label: 'Username:',
+        email: {
+          label: 'Email:',
           type: 'text',
-          placeholder: 'your-cool-username',
+          placeholder: 'your-cool-email',
         },
         password: {
           label: 'Password:',
@@ -23,16 +24,33 @@ export const config: NextAuthOptions = {
         },
       },
       async authorize(credentials) {
-        const user = { id: '42', name: 'chan', password: 'nextauth' }
+        if (!credentials?.email && !credentials?.password) return null
 
-        if (
-          credentials?.username === user.name &&
-          credentials?.password === user.password
-        )
-          return user
+        const user = await prisma.user.findFirst({
+          where: { email: credentials.email },
+        })
 
-        return null
+        if (!user) return null
+
+        // verify password
+
+        return {
+          ...user,
+          password: undefined,
+        }
       },
     }),
   ],
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) token.role = user.role
+
+      return token
+    },
+    async session({ session, token }) {
+      if (session.user) session.user.role = token.role
+
+      return session
+    },
+  },
 }
