@@ -1,11 +1,11 @@
 import { Todo } from '@prisma/client'
-import RemoveButton from './RemoveButton'
+import RemoveForm from './RemoveForm'
 
 const TodoItem = ({ todo }: { todo: Todo }) => {
   return (
     <li>
       {todo.title}
-      <RemoveButton id={todo.id} />
+      <RemoveForm id={todo.id} />
     </li>
   )
 }

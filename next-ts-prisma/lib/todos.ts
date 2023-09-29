@@ -17,3 +17,12 @@ export async function createTodo(title: string) {
     return { error }
   }
 }
+
+export async function removeTodo(id: string) {
+  try {
+    await prisma.todo.delete({ where: { id } })
+    return { error: null }
+  } catch (error) {
+    return { error }
+  }
+}
