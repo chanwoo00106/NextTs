@@ -6,20 +6,7 @@ import { db } from "@/lib/db";
 export const {
   handlers: { GET, POST },
 } = NextAuth({
-  callbacks: {
-    async session({ token, session }) {
-      if (token.sub && session.user) {
-        session.user.id = token.sub;
-      }
-      return session;
-    },
-
-    async jwt({ token }) {
-      return token;
-    },
-  },
-
+  ...authConfig,
   adapter: PrismaAdapter(db),
   session: { strategy: "jwt" },
-  ...authConfig,
 });
