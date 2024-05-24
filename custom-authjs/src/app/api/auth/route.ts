@@ -1,7 +1,7 @@
 import { verify, sign } from "jsonwebtoken";
 import { Token } from "@/constants/Token";
-import { z } from "zod";
 import { cookies } from "next/headers";
+import authSchema from "@/schema/authSchema";
 
 const invalidResponse = Response.json(
   { error: "Invalid token" },
@@ -23,13 +23,8 @@ export const GET = () => {
   }
 };
 
-const bodySchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(6),
-});
-
 export const POST = async (req: Request) => {
-  const { success, data } = bodySchema.safeParse(await req.json());
+  const { success, data } = authSchema.safeParse(await req.json());
   if (!success)
     return Response.json({ message: "Bad Request" }, { status: 400 });
 
